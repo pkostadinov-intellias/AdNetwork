@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  postgres-user:
+    image: postgres:latest
+    container_name: postgres-user
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_USER_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_USER_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-user-data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    ports:
+      - "5672:5672" # RabbitMQ message broker
+      - "15672:15672" # RabbitMQ management UI
+    networks:
+      - backend
+
+volumes:
+  postgres-user-data:
+
+networks:
+  backend:
+    driver: bridge
