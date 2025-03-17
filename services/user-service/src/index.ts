@@ -7,6 +7,7 @@ import { connectRedis } from './config/redis'
 import { connectRabbitMQ } from './config/rabbitmq'
 import { authRouter } from './auth/auth.route'
 import { errorHandlerMiddleware } from './middlewares/error-handler.middleware'
+import { userRouter } from './users/users.route'
 
 const app = new Koa()
 const router = new Router({
@@ -19,8 +20,11 @@ router.get('/', async (ctx) => {
 
 app.use(errorHandlerMiddleware)
 app.use(bodyParser())
-app.use(router.routes()).use(router.allowedMethods())
+
 router.use(authRouter.routes())
+router.use(userRouter.routes())
+
+app.use(router.routes()).use(router.allowedMethods())
 
 app.listen(config.PORT, async () => {
   console.log(`Auth Service is running on http://localhost:${config.PORT}`)
