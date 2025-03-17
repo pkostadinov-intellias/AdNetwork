@@ -1,8 +1,6 @@
 import Koa from 'koa'
 import Router from 'koa-router'
 import cors from '@koa/cors'
-// import { verifyToken } from './middlewares/auth'
-
 import { createProxy } from './middleware/proxy.middleware'
 import { connectRedis } from './config/redis'
 import { verifyToken } from './middleware/auth.middleware'
