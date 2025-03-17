@@ -8,6 +8,7 @@ import { connectRabbitMQ } from './config/rabbitmq'
 import { authRouter } from './auth/auth.route'
 import { errorHandlerMiddleware } from './middlewares/error-handler.middleware'
 import { userRouter } from './users/users.route'
+import { extractUserMiddleware } from './middlewares/extract-user.middleware'
 
 const app = new Koa()
 const router = new Router({
@@ -22,6 +23,8 @@ app.use(errorHandlerMiddleware)
 app.use(bodyParser())
 
 router.use(authRouter.routes())
+
+app.use(extractUserMiddleware)
 router.use(userRouter.routes())
 
 app.use(router.routes()).use(router.allowedMethods())

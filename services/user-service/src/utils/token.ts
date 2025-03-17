@@ -56,5 +56,7 @@ export const verifyToken = async (token: string): Promise<TokenPayload> => {
 }
 
 export const invalidateToken = async (userId: string) => {
-  await redisClient.del(`token:${userId}`)
+  const deleteCount = await redisClient.del(`token:${userId}`)
+
+  return deleteCount > 0
 }
