@@ -1,4 +1,4 @@
-import { loginUser, registerUser } from './auth.service'
+import { loginUser, logoutUser, registerUser } from './auth.service'
 
 import { Context } from 'koa'
 
@@ -20,4 +20,10 @@ export const login = async (ctx: Context) => {
 
   ctx.status = 200
   ctx.body = userWithToken
+}
+
+export const logout = async (ctx: Context) => {
+  await logoutUser(ctx.state.user.id)
+
+  ctx.status = 200
 }

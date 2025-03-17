@@ -1,13 +1,13 @@
 import bcrypt from 'bcryptjs'
 import createHttpError from 'http-errors'
-import { User, UserRole } from '../entities/User'
-import { serializedUser } from '../utils/helper'
+import { UserRole } from '../entities/User'
+import { omit } from 'lodash'
 import { userRepository } from '../config/database'
 import {
   createUserService,
   getUserWithPasswordByUsername,
 } from '../users/users.service'
-import { createToken } from '../utils/token'
+import { createToken, invalidateToken } from '../utils/token'
 import { publishUserRegistered } from '../events/producer'
 
 export const registerUser = async (
@@ -17,10 +17,11 @@ export const registerUser = async (
   role: UserRole,
 ) => {
   const userExists = await userRepository.findOne({ where: { username } })
-  if (userExists)
+  if (userExists) {
     throw new createHttpError.BadRequest(
       'User with this username already exists',
     )
+  }
 
   const newUser = await createUserService({ username, email, password, role })
 
@@ -28,17 +29,30 @@ export const registerUser = async (
 
   await publishUserRegistered({ id: newUser.id, username: newUser.username })
 
-  return { user: { ...serializedUser(newUser) }, token }
+  return { user: omit(newUser, ['password']), token }
 }
 
 export const loginUser = async (username: string, password: string) => {
   const user = await getUserWithPasswordByUsername(username)
 
   const isPasswordValid = await bcrypt.compare(password, user.password)
-  if (!isPasswordValid)
+  if (!isPasswordValid) {
     throw new createHttpError.Unauthorized('Invalid credentials')
+  }
 
   const token = await createToken(user)
 
-  return { user: { ...serializedUser(user) }, token }
+  return { user: omit(user, ['password']), token }
+}
+
+export const logoutUser = async (userId: string) => {
+  const wasTokenInvalidated = await invalidateToken(userId)
+
+  if (!wasTokenInvalidated) {
+    throw new createHttpError.BadRequest(
+      'Token does not exist or was already invalidated',
+    )
+  }
+
+  return wasTokenInvalidated
 }
