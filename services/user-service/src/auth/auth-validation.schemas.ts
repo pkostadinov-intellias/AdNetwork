@@ -43,9 +43,10 @@ export const registerSchema = {
 export const loginSchema = {
   type: 'object',
   properties: {
-    email: {
+    username: {
       type: 'string',
-      format: 'email',
+      minLength: 6,
+      maxLength: 20,
     },
     password: {
       type: 'string',
@@ -57,11 +58,11 @@ export const loginSchema = {
   additionalProperties: false,
   errorMessage: {
     properties: {
-      email: 'Email must be a valid format (e.g., user@example.com).',
+      username: 'Username must be between 6 and 20 characters.',
       password: 'Password must be between 6 and 20 characters.',
     },
     required: {
-      email: 'Email is required.',
+      username: 'Username is required.',
       password: 'Password is required.',
     },
   },

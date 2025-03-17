@@ -14,5 +14,5 @@ export const config = {
   },
   REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
   RABBITMQ_URL: process.env.RABBITMQ_URL || 'amqp://localhost',
-  JWT_SECRET: process.env.USER_SERVICE_JWT_SECRET,
+  JWT_SECRET: process.env.JWT_SECRET,
 }
