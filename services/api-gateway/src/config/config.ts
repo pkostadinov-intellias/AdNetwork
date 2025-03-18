@@ -1,7 +1,11 @@
 import dotenv from 'dotenv'
 import path from 'path'
 
-dotenv.config({ path: path.resolve(__dirname, '../../../../.env') })
+try {
+  dotenv.config({ path: path.resolve(__dirname, '../../../../.env') })
+} catch (error) {
+  throw new Error('Failed to load .env file')
+}
 
 export const config = {
   PORT: Number(process.env.API_GATEWAY_PORT),
