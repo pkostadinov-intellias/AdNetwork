@@ -16,6 +16,12 @@ export enum AssetStatus {
   DELETED = "deleted"
 }
 
+export enum AssetType {
+  AVATAR = "avatar",
+  COVER = "cover",
+  MEDIA = "media"
+}
+
 @Entity("assets")
 export class Asset {
   @PrimaryGeneratedColumn("uuid")
@@ -47,6 +53,13 @@ export class Asset {
     enum: AssetOwnerType
   })
   ownerType: AssetOwnerType;
+
+  @Column({
+    name: "asset_type",
+    type: "enum",
+    enum: AssetType
+  })
+  assetType: AssetType;
 
   @Column({ type: "bigint" })
   size: number;

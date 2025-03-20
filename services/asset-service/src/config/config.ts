@@ -21,6 +21,8 @@ export const config = {
     IMAGEKIT_PRIVATE_KEY: process.env.IMAGEKIT_PRIVATE_KEY!,
     IMAGEKIT_URL_ENDPOINT: process.env.IMAGEKIT_URL_ENDPOINT!
   },
+  USER_SERVICE_ENDPOINT: process.env.USER_SERVICE_ENDPOINT,
+  POSTS_SERVICE_ENDPOINT: process.env.POSTS_SERVICE_ENDPOINT ?? "",
   RABBITMQ_URL: process.env.RABBITMQ_URL || "amqp://localhost",
   JWT_SECRET: process.env.JWT_SECRET
 };
