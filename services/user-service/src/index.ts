@@ -16,7 +16,7 @@ const router = new Router({
 })
 
 router.get('/', async (ctx) => {
-  ctx.body = { message: 'Auth Service Running 🚀' }
+  ctx.body = { message: 'User Service Running 🚀' }
 })
 
 app.use(errorHandlerMiddleware)
