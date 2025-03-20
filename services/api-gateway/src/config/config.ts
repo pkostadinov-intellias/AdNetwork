@@ -16,7 +16,10 @@ export const config = {
     POSTS: '/api/v1/posts',
     ASSETS: '/api/v1/assets',
   },
-  REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
+  REDIS_URL:
+    process.env.REDIS_HOST && process.env.REDIS_PORT
+      ? `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`
+      : undefined,
 }
 
 if (!process.env.USER_SERVICE_URL) {

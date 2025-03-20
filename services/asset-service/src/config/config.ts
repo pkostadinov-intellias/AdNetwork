@@ -23,6 +23,9 @@ export const config = {
   },
   USER_SERVICE_ENDPOINT: process.env.USER_SERVICE_ENDPOINT,
   POSTS_SERVICE_ENDPOINT: process.env.POSTS_SERVICE_ENDPOINT ?? "",
-  RABBITMQ_URL: process.env.RABBITMQ_URL || "amqp://localhost",
+  RABBITMQ_URL:
+    process.env.RABBITMQ_HOST && process.env.RABBITMQ_PORT
+      ? `amqp://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}:${process.env.RABBITMQ_PORT}`
+      : undefined,
   JWT_SECRET: process.env.JWT_SECRET
 };

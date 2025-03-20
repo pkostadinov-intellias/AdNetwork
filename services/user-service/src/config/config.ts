@@ -1,10 +1,10 @@
 import dotenv from 'dotenv'
 import path from 'path'
 
-try {
-  dotenv.config({ path: path.resolve(__dirname, '../../../../.env') })
-} catch (error) {
-  throw new Error('Failed to load .env file')
+dotenv.config({ path: path.resolve(__dirname, '../../../../.env') })
+
+if (!process.env.RABBITMQ_HOST && !process.env.RABBITMQ_PORT) {
+  throw new Error('RABBITMQ_HOST OR RABBITMQ_PORT missing in environment file')
 }
 
 export const config = {
@@ -16,7 +16,13 @@ export const config = {
     PASSWORD: process.env.POSTGRES_USER_PASSWORD,
     DATABASE: process.env.POSTGRES_USER_DB,
   },
-  REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
-  RABBITMQ_URL: process.env.RABBITMQ_URL || 'amqp://localhost',
+  REDIS_URL:
+    process.env.REDIS_HOST && process.env.REDIS_PORT
+      ? `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`
+      : undefined,
+  RABBITMQ_URL:
+    process.env.RABBITMQ_HOST && process.env.RABBITMQ_PORT
+      ? `amqp://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}:${process.env.RABBITMQ_PORT}`
+      : undefined,
   JWT_SECRET: process.env.JWT_SECRET,
 }
