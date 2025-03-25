@@ -35,6 +35,8 @@ export const createToken = async (user: TokenPayload): Promise<string> => {
   return token
 }
 
+//REMOVE
+
 export const verifyToken = async (token: string): Promise<TokenPayload> => {
   try {
     const decoded = verify(token, JWT_SECRET) as TokenPayload
