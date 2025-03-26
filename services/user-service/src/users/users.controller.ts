@@ -3,6 +3,7 @@ import {
   createUserService,
   deleteUserService,
   getUserByIdService,
+  getUserByUsernameService,
   getUsersService,
   updateUserService,
 } from './users.service'
@@ -15,6 +16,11 @@ export const getUsers = async (ctx: Context) => {
 export const getUserById = async (ctx: Context) => {
   const { id } = ctx.params
   ctx.body = await getUserByIdService(id)
+}
+
+export const getUserByUsername = async (ctx: Context) => {
+  const { username } = ctx.params
+  ctx.body = await getUserByUsernameService(username)
 }
 
 export const createUser = async (ctx: Context) => {

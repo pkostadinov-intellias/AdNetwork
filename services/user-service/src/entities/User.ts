@@ -9,7 +9,6 @@ import {
 export enum UserRole {
   REGULAR = 'regular',
   ADVERTISER = 'advertiser',
-  MODERATOR = 'moderator',
   ADMIN = 'admin',
 }
 
@@ -35,6 +34,21 @@ export class User {
 
   @Column({ nullable: true })
   coverImageUrl: string
+
+  @Column({ nullable: true })
+  fullName: string
+
+  @Column({ nullable: true })
+  profession: string
+
+  @Column({ type: 'text', nullable: true })
+  biography: string
+
+  @Column({ type: 'int', default: 0 })
+  posts: number
+
+  @Column({ type: 'int', default: 0 })
+  connections: number
 
   @CreateDateColumn()
   createdAt: Date

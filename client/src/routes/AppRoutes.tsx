@@ -6,6 +6,7 @@ import { ProfileView } from "@/views/profile/ProfileView";
 const LoginView = lazy(() => import("@/views/auth/LoginView"));
 const RegisterView = lazy(() => import("@/views/auth/RegisterView"));
 const HomeView = lazy(() => import("@/views/home/HomeView"));
+const NotFoundView = lazy(() => import("@/views/not-found/NotFoundView"));
 
 export const AppRoutes = () => {
   return (
@@ -19,6 +20,8 @@ export const AppRoutes = () => {
             <Route path="/" element={<HomeView />} />
             <Route path="/profile/:username" element={<ProfileView />} />
           </Route>
+
+          <Route path="*" element={<NotFoundView />} />
         </Routes>
       </Suspense>
     </Router>

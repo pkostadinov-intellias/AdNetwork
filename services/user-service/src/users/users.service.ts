@@ -27,6 +27,16 @@ export const getUserWithPasswordByUsername = async (
   return user
 }
 
+export const getUserByUsernameService = async (
+  username: string,
+): Promise<User> => {
+  const user = await userRepository.findOne({ where: { username } })
+
+  if (!user) throw new createHttpError.BadRequest("User doesn't exist")
+
+  return user
+}
+
 export const createUserService = async (userData: Partial<User>) => {
   const { username, email, password, role } = userData
 

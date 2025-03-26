@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Search, PlusSquare, MessageCircle, User } from "lucide-react";
+import { Home, User } from "lucide-react";
 import { useAppSelector } from "@/store/redux-hooks/useAppSelector";
 
 export const Sidebar = () => {
@@ -17,7 +17,6 @@ export const Sidebar = () => {
 
   return (
     <>
-      {/* Desktop Sidebar */}
       <div className="hidden md:block w-[275px] border-r border-gray-200 bg-white h-screen sticky top-0">
         <div className="p-6">
           <h1 className="text-2xl font-bold mb-8">AdCommunity</h1>

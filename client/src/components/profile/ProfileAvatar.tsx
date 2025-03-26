@@ -1,34 +1,35 @@
+import { Camera } from "lucide-react";
 import { useAssets } from "@/hooks/assets/useAssets";
 import { AssetType } from "@/types/assets";
-import { Camera } from "lucide-react";
 
-interface ProfileCoverProps {
-  coverUrl: string | null;
+interface ProfileAvatarProps {
+  alt: string;
+  avatarUrl: string | null;
 }
 
-const ProfileCover = ({ coverUrl }: ProfileCoverProps) => {
+export const ProfileAvatar = ({ alt, avatarUrl }: ProfileAvatarProps) => {
   const { uploadAsset } = useAssets();
 
-  const handleCoverChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     try {
-      await uploadAsset(file, AssetType.COVER);
+      await uploadAsset(file, AssetType.AVATAR);
     } catch (error) {
-      console.error("Cover upload failed", error);
+      console.error("Avatar upload failed", error);
     }
   };
 
   return (
-    <div className="relative h-80 mb-4 rounded-lg overflow-hidden group">
+    <div className="relative -mt-20 group">
       <img
         src={
-          coverUrl! ||
+          avatarUrl ||
           "https://ui-avatars.com/api/?name=User&background=ddd&color=333&size=200"
         }
-        alt="Cover"
-        className="w-full h-full object-cover"
+        alt={alt}
+        className="w-32 h-32 rounded-full object-cover border-4 border-white"
       />
 
       <label className="absolute bottom-1 right-1 cursor-pointer bg-black text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
@@ -36,12 +37,10 @@ const ProfileCover = ({ coverUrl }: ProfileCoverProps) => {
         <input
           type="file"
           accept="image/*"
-          onChange={handleCoverChange}
+          onChange={handleAvatarChange}
           className="hidden"
         />
       </label>
     </div>
   );
 };
-
-export default ProfileCover;
