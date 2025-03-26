@@ -5,9 +5,14 @@ import { AssetType } from "@/types/assets";
 interface ProfileAvatarProps {
   alt: string;
   avatarUrl: string | null;
+  canEdit: boolean;
 }
 
-export const ProfileAvatar = ({ alt, avatarUrl }: ProfileAvatarProps) => {
+export const ProfileAvatar = ({
+  alt,
+  avatarUrl,
+  canEdit
+}: ProfileAvatarProps) => {
   const { uploadAsset } = useAssets();
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,15 +37,17 @@ export const ProfileAvatar = ({ alt, avatarUrl }: ProfileAvatarProps) => {
         className="w-32 h-32 rounded-full object-cover border-4 border-white"
       />
 
-      <label className="absolute bottom-1 right-1 cursor-pointer bg-black text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-        <Camera size={16} />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleAvatarChange}
-          className="hidden"
-        />
-      </label>
+      {canEdit && (
+        <label className="absolute bottom-1 right-1 cursor-pointer bg-black text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+          <Camera size={16} />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleAvatarChange}
+            className="hidden"
+          />
+        </label>
+      )}
     </div>
   );
 };

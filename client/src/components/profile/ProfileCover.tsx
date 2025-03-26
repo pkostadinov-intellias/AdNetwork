@@ -4,9 +4,10 @@ import { Camera } from "lucide-react";
 
 interface ProfileCoverProps {
   coverUrl: string | null;
+  canEdit: boolean;
 }
 
-const ProfileCover = ({ coverUrl }: ProfileCoverProps) => {
+const ProfileCover = ({ coverUrl, canEdit }: ProfileCoverProps) => {
   const { uploadAsset } = useAssets();
 
   const handleCoverChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,15 +32,17 @@ const ProfileCover = ({ coverUrl }: ProfileCoverProps) => {
         className="w-full h-full object-cover"
       />
 
-      <label className="absolute bottom-1 right-1 cursor-pointer bg-black text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-        <Camera size={16} />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleCoverChange}
-          className="hidden"
-        />
-      </label>
+      {canEdit && (
+        <label className="absolute bottom-1 right-1 cursor-pointer bg-black text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+          <Camera size={16} />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleCoverChange}
+            className="hidden"
+          />
+        </label>
+      )}
     </div>
   );
 };
