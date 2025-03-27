@@ -30,7 +30,7 @@ export const authBaseQuery: BaseQueryFn<
   const result = await baseQueryWithAuthHeaders(args, api, extraOptions);
 
   if (result?.error?.originalStatus === 401) {
-    api.dispatch(logoutUser);
+    api.dispatch(logoutUser());
   }
 
   return result;

@@ -4,14 +4,16 @@ import { AssetType } from "@/types/assets";
 
 interface ProfileAvatarProps {
   alt: string;
-  avatarUrl: string | null;
+  avatarUrl?: string;
   canEdit: boolean;
+  onUploadSuccess?: (url: string) => void;
 }
 
 export const ProfileAvatar = ({
   alt,
   avatarUrl,
-  canEdit
+  canEdit,
+  onUploadSuccess
 }: ProfileAvatarProps) => {
   const { uploadAsset } = useAssets();
 
@@ -20,14 +22,15 @@ export const ProfileAvatar = ({
     if (!file) return;
 
     try {
-      await uploadAsset(file, AssetType.AVATAR);
+      const newAvatar = await uploadAsset(file, AssetType.AVATAR);
+      onUploadSuccess?.(newAvatar.url);
     } catch (error) {
       console.error("Avatar upload failed", error);
     }
   };
 
   return (
-    <div className="relative -mt-16 sm:-mt-20 group flex-shrink-0">
+    <div className="relative -mt-16 sm:-mt-20 group flex-shrink-0 w-fit">
       <img
         src={
           avatarUrl ||
@@ -38,7 +41,10 @@ export const ProfileAvatar = ({
       />
 
       {canEdit && (
-        <label className="absolute bottom-1 right-1 cursor-pointer bg-black text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+        <label
+          className="absolute bottom-1 right-1 cursor-pointer bg-black text-white p-1 rounded-full 
+        opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+        >
           <Camera size={16} />
           <input
             type="file"

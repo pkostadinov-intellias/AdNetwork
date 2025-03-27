@@ -9,6 +9,7 @@ interface ProfileInfoSectionProps {
   postsCount: number;
   connectionsCount: number;
   canEdit?: boolean;
+  onEditProfile: () => void;
   onLogout?: () => void;
 }
 
@@ -21,6 +22,7 @@ export const ProfileInfoSection = ({
   postsCount,
   connectionsCount,
   canEdit = false,
+  onEditProfile,
   onLogout
 }: ProfileInfoSectionProps) => {
   return (
@@ -30,7 +32,10 @@ export const ProfileInfoSection = ({
 
         {canEdit && (
           <>
-            <button className="px-4 py-1.5 bg-gray-100 rounded-lg font-medium">
+            <button
+              onClick={onEditProfile}
+              className="px-4 py-1.5 bg-gray-100 rounded-lg font-medium cursor-pointer"
+            >
               Edit Profile
             </button>
             <button onClick={onLogout} className="cursor-pointer">
