@@ -27,7 +27,7 @@ export const ProfileAvatar = ({
   };
 
   return (
-    <div className="relative -mt-20 group">
+    <div className="relative -mt-16 sm:-mt-20 group flex-shrink-0">
       <img
         src={
           avatarUrl ||

@@ -40,7 +40,7 @@ export const Profile = () => {
   return (
     <div className="max-w-4xl mx-auto">
       <ProfileCover coverUrl={profile.coverImageUrl} canEdit={isOwner} />
-      <div className="flex items-start gap-8 mb-8">
+      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8 mb-8">
         <ProfileAvatar
           alt={profile.fullName}
           avatarUrl={profile.avatarUrl}
@@ -50,6 +50,7 @@ export const Profile = () => {
           fullName={profile.fullName}
           username={username!}
           role={profile.role}
+          profession={profile.profession}
           bio={profile.biography}
           postsCount={profile.posts}
           connectionsCount={profile.connections}

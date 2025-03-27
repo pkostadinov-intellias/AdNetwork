@@ -4,6 +4,7 @@ interface ProfileInfoSectionProps {
   fullName: string;
   username: string;
   role: string;
+  profession: string;
   bio: string;
   postsCount: number;
   connectionsCount: number;
@@ -15,6 +16,7 @@ export const ProfileInfoSection = ({
   fullName,
   username,
   role,
+  profession,
   bio,
   postsCount,
   connectionsCount,
@@ -49,7 +51,9 @@ export const ProfileInfoSection = ({
 
       <div>
         <p className="text-gray-600">@{username}</p>
-        <p className="text-gray-600">{role}</p>
+        <p className="text-gray-600">
+          {profession} ({role})
+        </p>
         {bio && <p className="mt-1">{bio}</p>}
       </div>
     </div>
