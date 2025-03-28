@@ -101,12 +101,12 @@ export const Profile = () => {
           {
             id: "2",
             image_url:
-              "https://ik.imagekit.io/4ywykjhlt/Screenshot%20at%20Mar%2026%2014-37-08.png?updatedAt=1743078999781"
+              "https://ik.imagekit.io/4ywykjhlt/default-image.jpg?updatedAt=1742225442531"
           },
           {
             id: "3",
             image_url:
-              "https://ik.imagekit.io/4ywykjhlt/Screenshot%20at%20Mar%2026%2014-37-08.png?updatedAt=1743078999781"
+              "https://ik.imagekit.io/4ywykjhlt/Screenshot_at_Mar_26_11-29-08_ZHJg6LucP.png?updatedAt=1742981362569"
           }
         ]}
       />
