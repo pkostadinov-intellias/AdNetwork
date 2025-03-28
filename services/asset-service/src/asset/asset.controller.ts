@@ -6,6 +6,7 @@ import {
   deleteAssetService
 } from "./asset.service";
 import createHttpError from "http-errors";
+import { getXUserHeader } from "../utils/assetUtils";
 
 export const uploadAsset = async (ctx: Context) => {
   const { fileName, fileType, ownerId, ownerType, assetType } =
@@ -25,7 +26,8 @@ export const uploadAsset = async (ctx: Context) => {
     fileType,
     ownerId,
     ownerType,
-    assetType
+    assetType,
+    getXUserHeader(ctx)
   );
 
   ctx.status = 201;
@@ -48,7 +50,14 @@ export const getAssetById = async (ctx: Context) => {
 
 export const deleteAsset = async (ctx: Context) => {
   const { id } = ctx.params;
-  await deleteAssetService(id);
+
+  const xUserHeader = ctx.headers["x-user"];
+
+  if (typeof xUserHeader !== "string") {
+    throw new createHttpError.Unauthorized("Invalid or Missing x-user header");
+  }
+
+  await deleteAssetService(id, getXUserHeader(ctx));
 
   ctx.status = 204;
 };

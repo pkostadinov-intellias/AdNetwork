@@ -5,6 +5,7 @@ import { connectDatabase } from "./config/database";
 import koaBody from "koa-body";
 import { assetRouter } from "./asset/asset.routes";
 import { errorHandlerMiddleware } from "./middleware/error-handler.middleware";
+import { extractUserMiddleware } from "./middleware/extract-user.middleware";
 
 const app = new Koa();
 const router = new Router({ prefix: "/api/v1" });
@@ -18,6 +19,8 @@ app.use(
     }
   })
 );
+
+app.use(extractUserMiddleware);
 
 router.use(assetRouter.routes());
 app.use(router.routes()).use(router.allowedMethods());

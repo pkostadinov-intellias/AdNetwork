@@ -2,6 +2,7 @@ import axios from "axios";
 import createHttpError from "http-errors";
 import { AssetOwnerType, AssetType } from "../entities/Asset";
 import { imageKit } from "../config/imageKit";
+import { Context } from "koa";
 
 /**
  * Validates if the owner exists by sending a GET request to the service.
@@ -12,7 +13,6 @@ export const validateOwner = async (serviceUrl: string, ownerId: string) => {
     await axios.get(`${serviceUrl}/${ownerId}`);
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.log("dadada");
       if (error.response) {
         if (error.response.status === 404) {
           throw new createHttpError.NotFound(
@@ -42,7 +42,8 @@ export const updateOwnerAssetReference = async (
   ownerType: AssetOwnerType,
   imageKitFileId: string,
   assetType: AssetType,
-  url: string | null
+  url: string | null,
+  headers: Record<string, string>
 ) => {
   const assetTypeMap: Record<AssetType, string> = {
     [AssetType.AVATAR]: "avatarUrl",
@@ -57,7 +58,7 @@ export const updateOwnerAssetReference = async (
   const payload = { [assetTypeMap[assetType]]: url };
 
   try {
-    await axios.patch(`${serviceUrl}/${ownerId}`, payload);
+    await axios.patch(`${serviceUrl}/${ownerId}`, payload, { headers });
   } catch (error) {
     if (url) {
       await imageKit.deleteFile(imageKitFileId);
@@ -66,4 +67,21 @@ export const updateOwnerAssetReference = async (
       `Failed to update ${ownerType} with new asset.`
     );
   }
+};
+
+/**
+ * Extracts and validates the "x-user" header from the incoming request context.
+ *
+ * This header is expected to be a JSON string injected by the API Gateway after token verification.
+ * It is used to authorize and authenticate the user in downstream microservices (e.g., asset, user).
+ *
+ */
+export const getXUserHeader = (ctx: Context): Record<"x-user", string> => {
+  const xUserHeader = ctx.headers["x-user"];
+
+  if (typeof xUserHeader !== "string") {
+    throw new createHttpError.Unauthorized("Invalid or missing x-user header");
+  }
+
+  return { "x-user": xUserHeader };
 };

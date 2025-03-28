@@ -13,7 +13,8 @@ export const uploadAssetService = async (
   fileType: string,
   ownerId: string,
   ownerType: AssetOwnerType,
-  assetType: AssetType
+  assetType: AssetType,
+  headers: Record<string, string>
 ) => {
   const serviceUrl = getServiceUrlByOwnerType(ownerType);
 
@@ -41,7 +42,8 @@ export const uploadAssetService = async (
     ownerType,
     imageKitFile.fileId,
     assetType,
-    imageKitFile.url
+    imageKitFile.url,
+    headers
   );
 
   await assetRepository.save(asset);
@@ -58,7 +60,10 @@ export const getAssetByIdService = async (id: string) => {
   return asset;
 };
 
-export const deleteAssetService = async (id: string) => {
+export const deleteAssetService = async (
+  id: string,
+  headers: Record<string, string>
+) => {
   const asset = await assetRepository.findOne({ where: { id } });
 
   if (!asset) throw new createHttpError.NotFound("Asset not found");
@@ -73,7 +78,8 @@ export const deleteAssetService = async (id: string) => {
     ownerType,
     imageKitFileId,
     assetType,
-    null
+    null,
+    headers
   );
 
   await imageKit.deleteFile(asset.imageKitFileId);
