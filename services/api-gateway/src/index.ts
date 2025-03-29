@@ -7,6 +7,7 @@ import { config } from './config/config'
 import { authRouter } from './routes/auth.routes'
 import { userRouter } from './routes/user.routes'
 import { assetRouter } from './routes/asset.routes'
+import { postRouter } from './routes/post.routes'
 
 const app = new Koa()
 const router = new Router()
@@ -20,11 +21,21 @@ router.use(verifyToken)
 
 router.use(userRouter.routes())
 router.use(assetRouter.routes())
+router.use(postRouter.routes())
 
 app.use(router.routes())
 app.use(router.allowedMethods())
 
-app.listen(config.PORT, async () => {
-  console.log(`API Gateway running on port ${config.PORT}`)
-  await connectRedis()
-})
+const startServer = async () => {
+  try {
+    await connectRedis()
+    app.listen(config.PORT, () => {
+      console.log(`API Gateway running on port ${config.PORT}`)
+    })
+  } catch (error) {
+    console.error('❌ Failed to connect to the database:', error)
+    process.exit(1)
+  }
+}
+
+startServer()

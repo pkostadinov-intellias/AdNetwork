@@ -14,6 +14,21 @@ services:
     networks:
       - backend
 
+  postgres-post:
+    image: postgres:latest
+    container_name: postgres-post
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_POST_DB}
+      POSTGRES_USER: ${POSTGRES_POST_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_POST_PASSWORD}
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres-post-data:/var/lib/postgresql/data
+    networks:
+      - backend
+
   postgres-asset:
     image: postgres:latest
     container_name: postgres-asset
@@ -87,6 +102,31 @@ services:
     networks:
       - backend
 
+  post-service:
+    build: ./services/post-service
+    container_name: post-service
+    restart: always
+    depends_on:
+      - postgres-post
+    environment:
+      NODE_ENV: development
+      POSTGRES_DB: ${POSTGRES_POST_DB}
+      POSTGRES_USER: ${POSTGRES_POST_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_POST_PASSWORD}
+      PORT: ${POST_SERVICE_PORT}
+      JWT_SECRET: ${JWT_SECRET}
+    env_file:
+      - .env
+    ports:
+      - "4001:4001"
+    volumes:
+      - ./services/post-service:/app
+      - /app/node_modules
+    working_dir: /app
+    command: npm run dev
+    networks:
+      - backend
+
   asset-service:
     build: ./services/asset-service
     container_name: asset-service
@@ -138,6 +178,7 @@ services:
 
 volumes:
   postgres-user-data:
+  postgres-post-data:
   postgres-asset-data:
 
 networks:

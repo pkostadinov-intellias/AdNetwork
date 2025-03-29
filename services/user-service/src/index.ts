@@ -29,9 +29,18 @@ router.use(userRouter.routes())
 
 app.use(router.routes()).use(router.allowedMethods())
 
-app.listen(config.PORT, async () => {
-  console.log(`Auth Service is running on http://localhost:${config.PORT}`)
-  await connectDatabase()
-  await connectRedis()
-  await connectRabbitMQ()
-})
+const startServer = async () => {
+  try {
+    await connectDatabase()
+    await connectRedis()
+    await connectRabbitMQ()
+    app.listen(config.PORT, () => {
+      console.log(`User Service is running on http://localhost:${config.PORT}`)
+    })
+  } catch (error) {
+    console.error('Failed to connect to the database:', error)
+    process.exit(1)
+  }
+}
+
+startServer()
