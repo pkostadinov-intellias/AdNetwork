@@ -4,7 +4,8 @@ import {
   uploadAsset,
   getAssetById,
   getAllAssets,
-  deleteAsset
+  deleteAsset,
+  getAssetByOwnerId
 } from "./asset.controller";
 import { validatorMiddleware } from "../middleware/validator.middleware";
 import { uploadAssetSchema } from "./asset-validation.schema";
@@ -23,5 +24,7 @@ assetRouter.post(
 assetRouter.get("/", getAllAssets);
 
 assetRouter.get("/:id", getAssetById);
+
+assetRouter.get("/by-owner/:ownerId", getAssetByOwnerId);
 
 assetRouter.delete("/:id", authorizeOwnerOrAdmin, deleteAsset);

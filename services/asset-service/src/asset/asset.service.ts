@@ -5,7 +5,10 @@ import { AssetOwnerType, AssetType } from "../entities/Asset";
 import { getServiceUrlByOwnerType } from "../utils/getServiceUrlByOwnerType.ts";
 import fs from "fs";
 import { File } from "formidable";
-import { updateOwnerAssetReference, validateOwner } from "../utils/assetUtils";
+import {
+  handleUserAssetReferenceUpdate,
+  validateUserExists
+} from "../utils/assetUtils";
 
 export const uploadAssetService = async (
   uploadedFile: File,
@@ -16,9 +19,9 @@ export const uploadAssetService = async (
   assetType: AssetType,
   headers: Record<string, string>
 ) => {
-  const serviceUrl = getServiceUrlByOwnerType(ownerType);
-
-  await validateOwner(serviceUrl, ownerId);
+  if (ownerType === AssetOwnerType.USER) {
+    await validateUserExists(ownerId);
+  }
 
   const file = fs.readFileSync(uploadedFile.filepath);
 
@@ -36,15 +39,15 @@ export const uploadAssetService = async (
     metadata: imageKitFile.metadata
   });
 
-  await updateOwnerAssetReference(
-    serviceUrl,
-    ownerId,
-    ownerType,
-    imageKitFile.fileId,
-    assetType,
-    imageKitFile.url,
-    headers
-  );
+  if (ownerType === AssetOwnerType.USER) {
+    await handleUserAssetReferenceUpdate(
+      ownerId,
+      imageKitFile.fileId,
+      assetType,
+      imageKitFile.url,
+      headers
+    );
+  }
 
   await assetRepository.save(asset);
   return asset;
@@ -60,6 +63,12 @@ export const getAssetByIdService = async (id: string) => {
   return asset;
 };
 
+export const getAssetByOnwerIdService = async (ownerId: string) => {
+  const asset = await assetRepository.findOne({ where: { ownerId } });
+  if (!asset) throw new createHttpError.NotFound("Asset not found");
+  return asset;
+};
+
 export const deleteAssetService = async (
   id: string,
   headers: Record<string, string>
@@ -70,18 +79,15 @@ export const deleteAssetService = async (
 
   const { ownerId, ownerType, imageKitFileId, assetType } = asset;
 
-  const serviceUrl = getServiceUrlByOwnerType(asset.ownerType);
-
-  await updateOwnerAssetReference(
-    serviceUrl,
-    ownerId,
-    ownerType,
-    imageKitFileId,
-    assetType,
-    null,
-    headers
-  );
-
+  if (ownerType === AssetOwnerType.USER) {
+    await handleUserAssetReferenceUpdate(
+      ownerId,
+      imageKitFileId,
+      assetType,
+      null,
+      headers
+    );
+  }
   await imageKit.deleteFile(asset.imageKitFileId);
   await assetRepository.delete(id);
 };

@@ -1,16 +1,17 @@
 import axios from "axios";
 import createHttpError from "http-errors";
-import { AssetOwnerType, AssetType } from "../entities/Asset";
+import { AssetType } from "../entities/Asset";
 import { imageKit } from "../config/imageKit";
 import { Context } from "koa";
+import { config } from "../config/config";
 
 /**
  * Validates if the owner exists by sending a GET request to the service.
  * Throws appropriate errors if the owner is missing or service is down.
  */
-export const validateOwner = async (serviceUrl: string, ownerId: string) => {
+export const validateUserExists = async (ownerId: string) => {
   try {
-    await axios.get(`${serviceUrl}/${ownerId}`);
+    await axios.get(`${config.USER_SERVICE_ENDPOINT}/${ownerId}`);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
@@ -36,19 +37,16 @@ export const validateOwner = async (serviceUrl: string, ownerId: string) => {
 /**
  * Updates or removes the asset reference for an owner.
  */
-export const updateOwnerAssetReference = async (
-  serviceUrl: string,
+export const updateUserAssetReference = async (
   ownerId: string,
-  ownerType: AssetOwnerType,
   imageKitFileId: string,
-  assetType: AssetType,
+  assetType: AssetType.AVATAR | AssetType.COVER,
   url: string | null,
   headers: Record<string, string>
 ) => {
-  const assetTypeMap: Record<AssetType, string> = {
+  const assetTypeMap: Record<AssetType.AVATAR | AssetType.COVER, string> = {
     [AssetType.AVATAR]: "avatarUrl",
-    [AssetType.COVER]: "coverImageUrl",
-    [AssetType.MEDIA]: "mediaUrl"
+    [AssetType.COVER]: "coverImageUrl"
   };
 
   if (!(assetType in assetTypeMap)) {
@@ -58,13 +56,15 @@ export const updateOwnerAssetReference = async (
   const payload = { [assetTypeMap[assetType]]: url };
 
   try {
-    await axios.patch(`${serviceUrl}/${ownerId}`, payload, { headers });
+    await axios.patch(`${config.USER_SERVICE_ENDPOINT}/${ownerId}`, payload, {
+      headers
+    });
   } catch (error) {
     if (url) {
       await imageKit.deleteFile(imageKitFileId);
     }
     throw new createHttpError.InternalServerError(
-      `Failed to update ${ownerType} with new asset.`
+      `Failed to update User with new asset.`
     );
   }
 };
@@ -84,4 +84,29 @@ export const getXUserHeader = (ctx: Context): Record<"x-user", string> => {
   }
 
   return { "x-user": xUserHeader };
+};
+
+export const isUserAssetType = (
+  type: AssetType
+): type is AssetType.AVATAR | AssetType.COVER => {
+  return type === AssetType.AVATAR || type === AssetType.COVER;
+};
+
+/**
+ * Safely updates or removes the avatar or cover image reference for a user.
+ * This function ensures that only valid user asset types are processed.
+ * Actual update logic and fallback deletion is handled by `updateUserAssetReference`.
+ */
+export const handleUserAssetReferenceUpdate = async (
+  ownerId: string,
+  fileId: string,
+  assetType: AssetType,
+  url: string | null,
+  headers: Record<string, string>
+) => {
+  if (!isUserAssetType(assetType)) {
+    throw new createHttpError.BadRequest("Invalid asset type for user");
+  }
+
+  await updateUserAssetReference(ownerId, fileId, assetType, url, headers);
 };

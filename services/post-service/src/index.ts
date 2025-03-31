@@ -5,6 +5,7 @@ import { connectDatabase } from "./config/database";
 import { errorHandlerMiddleware } from "./middleware/error-handler.middleware";
 import koaBody from "koa-body";
 import { extractUserMiddleware } from "./middleware/extract-user.middleware";
+import { postRouter } from "./modules/posts/post.routes";
 
 const app = new Koa();
 const router = new Router({
@@ -27,6 +28,8 @@ app.use(extractUserMiddleware);
 router.get("/posts/health", async (ctx) => {
   ctx.body = { message: "Post Service Running " };
 });
+
+router.use(postRouter.routes());
 
 app.use(router.routes()).use(router.allowedMethods());
 

@@ -3,6 +3,14 @@ import path from "path";
 
 dotenv.config({ path: path.resolve(__dirname, "../../../../.env") });
 
+if (!process.env.ASSET_SERVICE_ENDPOINT) {
+  throw new Error("ASSET_SERVICE_ENDPOINT missing in environment file");
+}
+
+if (!process.env.USER_SERVICE_ENDPOINT) {
+  throw new Error("USER_SERVICE_ENDPOINT missing in environment file");
+}
+
 export const config = {
   PORT: process.env.POST_SERVICE_PORT ?? 4001,
   POSTGRES: {
@@ -12,5 +20,7 @@ export const config = {
     PASSWORD: process.env.POSTGRES_POST_PASSWORD,
     DATABASE: process.env.POSTGRES_POST_DB
   },
+  ASSET_SERVICE_ENDPOINT: process.env.ASSET_SERVICE_ENDPOINT,
+  USER_SERVICE_ENDPOINT: process.env.USER_SERVICE_ENDPOINT,
   JWT_SECRET: process.env.JWT_SECRET
 };

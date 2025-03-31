@@ -3,7 +3,8 @@ import {
   uploadAssetService,
   getAssetByIdService,
   getAllAssetsService,
-  deleteAssetService
+  deleteAssetService,
+  getAssetByOnwerIdService
 } from "./asset.service";
 import createHttpError from "http-errors";
 import { getXUserHeader } from "../utils/assetUtils";
@@ -43,6 +44,14 @@ export const getAllAssets = async (ctx: Context) => {
 export const getAssetById = async (ctx: Context) => {
   const { id } = ctx.params;
   const asset = await getAssetByIdService(id);
+
+  ctx.status = 200;
+  ctx.body = asset;
+};
+
+export const getAssetByOwnerId = async (ctx: Context) => {
+  const { ownerId } = ctx.params;
+  const asset = await getAssetByOnwerIdService(ownerId);
 
   ctx.status = 200;
   ctx.body = asset;

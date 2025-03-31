@@ -26,7 +26,7 @@ export class Post {
   @Column({ type: "text", nullable: true })
   content: string;
 
-  @Column({ type: "text" })
+  @Column({ type: "text", nullable: true })
   mediaUrl: string;
 
   @Column({

@@ -1,6 +1,8 @@
 import { DataSource } from "typeorm";
 import { config } from "./config";
 import { Post } from "../entities/Post";
+import { Like } from "../entities/Like";
+import { Comment } from "../entities/Comment";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -23,3 +25,5 @@ export const connectDatabase = async () => {
 };
 
 export const postRepository = AppDataSource.getRepository(Post);
+export const likeRepository = AppDataSource.getRepository(Like);
+export const commentRepository = AppDataSource.getRepository(Comment);

@@ -3,7 +3,6 @@ import { AssetOwnerType, AssetType } from "../entities/Asset";
 export const uploadAssetSchema = {
   type: "object",
   properties: {
-    file: { type: "object" },
     fileName: { type: "string", minLength: 1 },
     fileType: { type: "string", minLength: 1 },
     ownerId: { type: "string", minLength: 1 },
@@ -14,7 +13,6 @@ export const uploadAssetSchema = {
   additionalProperties: false,
   errorMessage: {
     properties: {
-      file: "File is required and must be a valid base64 encoded string.",
       fileName: "File name is required and must be at least 1 character long.",
       fileType: "File type is required and must be a valid MIME type.",
       ownerId: "Owner ID is required and must be a valid UUID.",
