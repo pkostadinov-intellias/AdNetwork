@@ -4,7 +4,6 @@ import { TextField } from "@/components/ui/TextField";
 import { editProfileSchema } from "@/schemas/profile/editProfileSchema";
 
 interface EditProfileFormProps {
-  username: string;
   fullName: string;
   profession: string;
   bio: string;
@@ -16,7 +15,6 @@ interface EditProfileFormProps {
 }
 
 export interface ProfileFormData {
-  username: string;
   email: string;
   fullName: string;
   profession: string;
@@ -25,7 +23,6 @@ export interface ProfileFormData {
 
 export const EditProfileForm = ({
   fullName,
-  username,
   profession,
   bio,
   email,
@@ -41,7 +38,6 @@ export const EditProfileForm = ({
   } = useForm<ProfileFormData>({
     resolver: yupResolver(editProfileSchema),
     defaultValues: {
-      username: username || "",
       fullName: fullName || "",
       profession: profession || "",
       biography: bio || "",
@@ -52,15 +48,6 @@ export const EditProfileForm = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="space-y-4">
-        <TextField
-          name="username"
-          control={control}
-          placeholder="Enter username"
-        />
-        {errors.username && (
-          <p className="text-sm text-red-500">{errors.username.message}</p>
-        )}
-
         <TextField
           name="email"
           control={control}

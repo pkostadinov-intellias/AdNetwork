@@ -21,7 +21,6 @@ interface EditProfileDialogProps {
 const EditProfileDialog = ({
   profileId,
   fullName,
-  username,
   profession,
   bio,
   email,
@@ -73,7 +72,6 @@ const EditProfileDialog = ({
             />
           </div>
           <EditProfileForm
-            username={username}
             fullName={fullName}
             profession={profession}
             bio={bio}

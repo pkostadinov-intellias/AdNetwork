@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, User } from "lucide-react";
+import { Home, PlusSquare, User } from "lucide-react";
 import { useAppSelector } from "@/store/redux-hooks/useAppSelector";
 
 export const Sidebar = () => {
@@ -9,7 +9,7 @@ export const Sidebar = () => {
   const navItems = [
     { icon: Home, label: "Home", path: "/" },
     // { icon: Search, label: "Search", path: "/search" },
-    // { icon: PlusSquare, label: "Create", path: "/create" },
+    { icon: PlusSquare, label: "Create", path: "/posts/create" },
     // { icon: MessageCircle, label: "Messages", path: "/messages" },
     // { icon: Heart, label: "Notifications", path: "/notifications" },
     { icon: User, label: "Profile", path: `/profile/${username}` }

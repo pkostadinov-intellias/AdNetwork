@@ -1,24 +1,26 @@
-interface Post {
-  id: string;
-  image_url: string;
-}
+import { useGetPostsByUserIdQuery } from "@/services/postApi";
 
-const ProfilePosts = ({ posts }: { posts: Post[] }) => {
+type Props = {
+  userId: string;
+};
+
+export const ProfilePosts = ({ userId }: Props) => {
+  const { data: posts = [], isLoading } = useGetPostsByUserIdQuery(userId);
+
+  if (isLoading) {
+    return <div className="text-center text-gray-500">Loading posts...</div>;
+  }
+
   return (
-    <div className="border-t border-gray-200">
-      <div className="grid grid-cols-3 gap-1">
-        {posts.map((post) => (
-          <div key={post.id} className="aspect-square">
-            <img
-              src={post.image_url}
-              alt="Post"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        ))}
-      </div>
+    <div className="grid grid-cols-3 gap-4">
+      {posts.map((post) => (
+        <img
+          key={post.id}
+          src={post.mediaUrl}
+          alt="Post"
+          className="w-full h-auto rounded-lg object-cover aspect-square"
+        />
+      ))}
     </div>
   );
 };
-
-export default ProfilePosts;

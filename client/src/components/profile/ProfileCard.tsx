@@ -26,7 +26,7 @@ function ProfileCard() {
   }
 
   return (
-    <div className="hidden lg:block w-80 sticky top-6 mr-4 bg-white rounded-lg border border-gray-200 overflow-hidden">
+    <div className="hidden lg:block w-80 mr-4 bg-white sticky top-0 h-screen rounded-lg border border-gray-200 overflow-hidden">
       <div className="flex flex-col items-center p-6">
         <Link to={`/profile/${profile.username}`}>
           <img

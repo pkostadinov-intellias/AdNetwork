@@ -2,7 +2,6 @@ import createHttpError from "http-errors";
 import { assetRepository } from "../config/database";
 import { imageKit } from "../config/imageKit";
 import { AssetOwnerType, AssetType } from "../entities/Asset";
-import { getServiceUrlByOwnerType } from "../utils/getServiceUrlByOwnerType.ts";
 import fs from "fs";
 import { File } from "formidable";
 import {

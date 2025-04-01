@@ -3,27 +3,27 @@ import { authBaseQuery } from "./authBaseQuery";
 
 const ENDPOINT = "users";
 
+const TAG = "User";
+
 export const profileApi = createApi({
   reducerPath: "profileApi",
   baseQuery: authBaseQuery,
-  tagTypes: ["User"],
+  tagTypes: [TAG],
 
   endpoints: (builder) => ({
     getAllUsers: builder.query({
       query: () => `${ENDPOINT}`,
-      providesTags: ["User"]
+      providesTags: [TAG]
     }),
 
     getUserById: builder.query({
-      query: (id: string) => `${ENDPOINT}/id/${id}`,
-      providesTags: (result, error, id) => [{ type: "User", id }]
+      query: (id: string) => `${ENDPOINT}/${id}`,
+      providesTags: (result, error, id) => [{ type: TAG, id }]
     }),
 
     getUserByUsername: builder.query({
       query: (username: string) => `${ENDPOINT}/username/${username}`,
-      providesTags: (result, error, username) => [
-        { type: "User", id: username }
-      ]
+      providesTags: (result, error, username) => [{ type: TAG, id: username }]
     }),
 
     createUser: builder.mutation({
@@ -32,7 +32,7 @@ export const profileApi = createApi({
         method: "POST",
         body: userData
       }),
-      invalidatesTags: ["User"]
+      invalidatesTags: [TAG]
     }),
 
     updateUser: builder.mutation({
@@ -41,7 +41,7 @@ export const profileApi = createApi({
         method: "PATCH",
         body: patch
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: "User", id }]
+      invalidatesTags: (result, error, { id }) => [{ type: TAG, id }]
     }),
 
     deleteUser: builder.mutation({
@@ -49,7 +49,7 @@ export const profileApi = createApi({
         url: `${ENDPOINT}/${id}`,
         method: "DELETE"
       }),
-      invalidatesTags: (result, error, id) => [{ type: "User", id }, "User"]
+      invalidatesTags: (result, error, id) => [{ type: TAG, id }, TAG]
     })
   })
 });

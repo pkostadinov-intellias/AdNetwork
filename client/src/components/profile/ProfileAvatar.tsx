@@ -1,6 +1,7 @@
 import { Camera } from "lucide-react";
 import { useAssets } from "@/hooks/assets/useAssets";
 import { AssetType } from "@/types/assets";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface ProfileAvatarProps {
   alt: string;
@@ -15,7 +16,7 @@ export const ProfileAvatar = ({
   canEdit,
   onUploadSuccess
 }: ProfileAvatarProps) => {
-  const { uploadAsset } = useAssets();
+  const { uploadAsset, uploadStatus } = useAssets();
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -40,7 +41,13 @@ export const ProfileAvatar = ({
         className="w-32 h-32 rounded-full object-cover border-4 border-white"
       />
 
-      {canEdit && (
+      {uploadStatus.isLoading && (
+        <div className="absolute inset-0 rounded-full bg-white bg-opacity-50 flex items-center justify-center">
+          <ClipLoader color="#000" size={40} />
+        </div>
+      )}
+
+      {canEdit && !uploadStatus.isLoading && (
         <label
           className="absolute bottom-1 right-1 cursor-pointer bg-black text-white p-1 rounded-full 
         opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"

@@ -1,6 +1,7 @@
 import { useAssets } from "@/hooks/assets/useAssets";
 import { AssetType } from "@/types/assets";
 import { Camera } from "lucide-react";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface ProfileCoverProps {
   alt: string;
@@ -15,7 +16,7 @@ const ProfileCover = ({
   alt,
   onUploadSuccess
 }: ProfileCoverProps) => {
-  const { uploadAsset } = useAssets();
+  const { uploadAsset, uploadStatus } = useAssets();
 
   const handleCoverChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -40,10 +41,16 @@ const ProfileCover = ({
         className="w-full h-full object-cover"
       />
 
-      {canEdit && (
+      {uploadStatus.isLoading && (
+        <div className="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center">
+          <ClipLoader color="#000" size={40} />
+        </div>
+      )}
+
+      {canEdit && !uploadStatus.isLoading && (
         <label
           className="absolute bottom-1 right-1 cursor-pointer bg-black text-white p-1 rounded-full 
-        opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+          opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
         >
           <Camera size={16} />
           <input

@@ -87,7 +87,6 @@ export const createUserSchema = {
 export const updateUserSchema = {
   type: 'object',
   properties: {
-    username: { type: 'string', minLength: 6, maxLength: 20 },
     email: { type: 'string', format: 'email' },
     password: { type: 'string', minLength: 6, maxLength: 20 },
     role: { type: 'string', enum: Object.values(UserRole) },
@@ -102,7 +101,6 @@ export const updateUserSchema = {
   additionalProperties: false,
   errorMessage: {
     properties: {
-      username: 'Username must be between 6 and 20 characters.',
       email: 'Email must be a valid format (e.g., user@example.com).',
       password: 'Password must be between 6 and 20 characters.',
       role: `Role must be one of: ${Object.values(UserRole).join(', ')}.`,

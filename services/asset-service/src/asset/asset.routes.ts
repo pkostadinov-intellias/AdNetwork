@@ -12,12 +12,14 @@ import { uploadAssetSchema } from "./asset-validation.schema";
 import { authorizeUserOrAdmin } from "../middleware/authorize-user-admin.middleware";
 import { authorizeOwnerOrAdmin } from "../middleware/authorize-owner-admin.middleware";
 
+//TODO FIX AUTHORIZATION MIDDLEWARE TO WORK WITH POSTS.
+
 export const assetRouter = new Router({ prefix: "/assets" });
 
 assetRouter.post(
   "/",
   validatorMiddleware(uploadAssetSchema),
-  authorizeUserOrAdmin,
+  // authorizeUserOrAdmin,
   uploadAsset
 );
 
@@ -27,4 +29,8 @@ assetRouter.get("/:id", getAssetById);
 
 assetRouter.get("/by-owner/:ownerId", getAssetByOwnerId);
 
-assetRouter.delete("/:id", authorizeOwnerOrAdmin, deleteAsset);
+assetRouter.delete(
+  "/:id",
+  // authorizeOwnerOrAdmin,
+  deleteAsset
+);

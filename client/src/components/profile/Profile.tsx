@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import ProfileCover from "./ProfileCover";
-import ProfilePosts from "./ProfilePosts";
 import { useGetUserByUsernameQuery } from "@/services/profileApi";
 import { useAppSelector } from "@/store/redux-hooks/useAppSelector";
 import { ProfileAvatar } from "./ProfileAvatar";
@@ -8,7 +7,8 @@ import { ProfileInfoSection } from "./ProfileInfoSection";
 import { useAppDispatch } from "@/store/redux-hooks/useAppDispatch";
 import { useLogoutMutation } from "@/services/authApi";
 import { logoutUser } from "@/store/slices/authSlice";
-import { useDialog } from "@/contexts/DialogContext";
+import { DialogType, useDialog } from "@/contexts/DialogContext";
+import { ProfilePosts } from "./ProfilePosts";
 
 export const Profile = () => {
   const { username } = useParams();
@@ -53,10 +53,9 @@ export const Profile = () => {
   } = profile;
 
   const handleEditProfile = () => {
-    openDialog("editProfile", {
+    openDialog(DialogType.EDIT_PROFILE, {
       profileId: currentUser?.id,
       fullName,
-      username,
       profession,
       email,
       bio,
@@ -91,25 +90,7 @@ export const Profile = () => {
           onLogout={handleLogout}
         />
       </div>
-      <ProfilePosts
-        posts={[
-          {
-            id: "1",
-            image_url:
-              "https://ik.imagekit.io/4ywykjhlt/Screenshot%20at%20Mar%2026%2014-37-08.png?updatedAt=1743078999781"
-          },
-          {
-            id: "2",
-            image_url:
-              "https://ik.imagekit.io/4ywykjhlt/default-image.jpg?updatedAt=1742225442531"
-          },
-          {
-            id: "3",
-            image_url:
-              "https://ik.imagekit.io/4ywykjhlt/Screenshot_at_Mar_26_11-29-08_ZHJg6LucP.png?updatedAt=1742981362569"
-          }
-        ]}
-      />
+      <ProfilePosts userId={profile.id} />
     </div>
   );
 };
