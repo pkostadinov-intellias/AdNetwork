@@ -38,7 +38,6 @@ export const useRegister = () => {
   const roleOptions = [
     { value: "regular", label: "Regular" },
     { value: "advertiser", label: "Advertiser" },
-    { value: "moderator", label: "Moderator" },
     { value: "admin", label: "Admin" }
   ];
 

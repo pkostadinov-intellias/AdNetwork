@@ -9,6 +9,7 @@ export interface Comment {
   id: string;
   userId: string;
   postId: string;
+  username: string;
   content: string;
   createdAt: string;
 }

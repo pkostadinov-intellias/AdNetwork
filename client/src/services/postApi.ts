@@ -31,8 +31,8 @@ export const postApi = createApi({
         url: ENDPOINT,
         method: "POST",
         body: formData
-      }),
-      invalidatesTags: [TAG]
+      })
+      // invalidatesTags: [TAG]
     }),
 
     updatePost: builder.mutation<Post, { id: string; data: UpdatePostPayload }>(
@@ -64,7 +64,7 @@ export const postApi = createApi({
 
     createComment: builder.mutation<
       Comment,
-      { postId: string; data: { content: string } }
+      { postId: string; data: { content: string; username: string } }
     >({
       query: ({ postId, data }) => ({
         url: `${ENDPOINT}/${postId}/comments`,

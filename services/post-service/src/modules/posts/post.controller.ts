@@ -64,10 +64,11 @@ export const deletePost = async (ctx: Context) => {
 
 export const createComment = async (ctx: Context) => {
   const userId = ctx.state.user.id;
+  const username = ctx.state.user.username;
   const postId = ctx.params.id;
   const { content } = ctx.request.body;
 
-  const comment = await createCommentService(postId, userId, content);
+  const comment = await createCommentService(postId, userId, username, content);
 
   ctx.status = 201;
   ctx.body = comment;

@@ -1,7 +1,11 @@
+import { PostWithCommentsDialog } from "@/components/posts/PostWithCommentsDialog";
 import EditProfileDialog from "@/components/profile/edit-profile/EditProfileDialog";
 import { createContext, useContext, useState } from "react";
 
-type DialogType = "editProfile";
+export enum DialogType {
+  EDIT_PROFILE = "editProfile",
+  POST_WITH_COMMENTS = "postWithComments"
+}
 
 interface DialogContextType {
   openDialog: (type: DialogType, data?: any) => void;
@@ -30,7 +34,10 @@ export const DialogProvider = ({ children }: { children: React.ReactNode }) => {
     <DialogContext.Provider value={{ type, data, openDialog, closeDialog }}>
       {children}
 
-      {type === "editProfile" && <EditProfileDialog {...data} />}
+      {type === DialogType.POST_WITH_COMMENTS && (
+        <PostWithCommentsDialog postId={data.postId} userId={data.userId} />
+      )}
+      {type === DialogType.EDIT_PROFILE && <EditProfileDialog {...data} />}
     </DialogContext.Provider>
   );
 };
