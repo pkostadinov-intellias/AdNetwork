@@ -19,7 +19,6 @@ export const ProfileInfoSection = ({
   role,
   profession,
   bio,
-  postsCount,
   connectionsCount,
   canEdit = false,
   onEditProfile,
