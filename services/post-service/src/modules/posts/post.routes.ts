@@ -7,7 +7,8 @@ import {
   updatePost,
   deletePost,
   toggleLike,
-  createComment
+  createComment,
+  deleteComment
 } from "./post.controller";
 
 import { validatorMiddleware } from "../../middleware/validator.middleware";
@@ -16,6 +17,8 @@ import {
   createPostSchema,
   updatePostSchema
 } from "./post-validation.shema";
+
+//TODO ADD AUTHORIZATION HERE
 
 export const postRouter = new Router();
 
@@ -30,11 +33,14 @@ postRouter.patch(
   updatePost
 );
 
+postRouter.delete("/posts/:id", deletePost);
+
 postRouter.post(
   "/posts/:id/comments",
   validatorMiddleware(createCommentSchema),
   createComment
 );
-postRouter.post("/posts/:id/likes", toggleLike);
 
-postRouter.delete("/posts/:id", deletePost);
+postRouter.delete("/posts/:id/comments/:commentId", deleteComment);
+
+postRouter.post("/posts/:id/likes", toggleLike);

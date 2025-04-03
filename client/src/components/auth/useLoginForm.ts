@@ -11,7 +11,7 @@ export type LoginFormValues = {
   password: string;
 };
 
-export const useLogin = () => {
+export const useLoginForm = () => {
   const dispatch = useAppDispatch();
   const [login, { isLoading, error }] = useLoginMutation();
   const navigate = useNavigate();

@@ -82,7 +82,6 @@ export const createPostService = async (
   }
 };
 
-//TODO NEED TO REFACTOR updatePostService TO HANDLE IMAGES
 export const updatePostService = async (id: string, data: Partial<Post>) => {
   const post = await postRepository.findOneBy({ id });
 
@@ -145,6 +144,16 @@ export const createCommentService = async (
     post
   });
   return await commentRepository.save(newComment);
+};
+
+export const deleteCommentService = async (commentId: string) => {
+  const comment = await commentRepository.findOneBy({ id: commentId });
+
+  if (!comment) {
+    throw new createHttpError.NotFound("Comment not found");
+  }
+
+  return await commentRepository.remove(comment);
 };
 
 export const toggleLikeService = async (postId: string, userId: string) => {

@@ -1,5 +1,6 @@
-import { DialogType, useDialog } from "@/contexts/DialogContext";
+import { useDialog } from "@/hooks/useDialog";
 import { useGetPostsByUserIdQuery } from "@/services/postApi";
+import { DialogType } from "@/types/dialog";
 
 type Props = {
   userId: string;

@@ -15,7 +15,7 @@ export type RegisterFormValues = {
   role: string;
 };
 
-export const useRegister = () => {
+export const useRegisterForm = () => {
   const dispatch = useAppDispatch();
   const [register, { isLoading, error }] = useRegisterMutation();
   const navigate = useNavigate();

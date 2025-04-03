@@ -3,8 +3,9 @@ import { Post } from "@/types/post";
 import { useGetUserByIdQuery } from "@/services/profileApi";
 import { useToggleLikeMutation } from "@/services/postApi";
 import { useAppSelector } from "@/store/redux-hooks/useAppSelector";
-import { DialogType, useDialog } from "@/contexts/DialogContext";
-import { Link } from "react-router-dom";
+import { useDialog } from "@/hooks/useDialog";
+import { DialogType } from "@/types/dialog";
+import { PostHeader } from "./PostHeader";
 
 type PostCardProps = {
   post: Post;
@@ -27,19 +28,11 @@ export const PostCard = ({ post }: PostCardProps) => {
 
   return (
     <div className="bg-white rounded-lg border border-gray-200">
-      <Link to={`/profile/${user?.username}`}>
-        <div className="flex items-center p-4">
-          <img
-            src={
-              user?.avatarUrl ||
-              "https://ui-avatars.com/api/?name=User&background=ddd&color=333&size=200"
-            }
-            alt={user?.username}
-            className="w-8 h-8 rounded-full object-cover"
-          />
-          <span className="ml-3 font-medium">{user?.username}</span>
-        </div>
-      </Link>
+      <PostHeader
+        username={user?.username}
+        avatarUrl={user?.avatarUrl}
+        post={post}
+      />
 
       {post.mediaUrl && (
         <img
@@ -54,7 +47,7 @@ export const PostCard = ({ post }: PostCardProps) => {
           <div className="flex items-center space-x-4">
             <button
               onClick={() => toggleLike(post.id)}
-              className={`transition-colors ${
+              className={`transition-colors cursor-pointer ${
                 isLikedByMe
                   ? "text-red-500"
                   : "text-gray-600 hover:text-red-500"

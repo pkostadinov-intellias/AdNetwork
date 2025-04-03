@@ -1,5 +1,5 @@
+import { useDialog } from "@/hooks/useDialog";
 import { X } from "lucide-react";
-import { useDialog } from "@/contexts/DialogContext";
 import { ReactNode } from "react";
 
 export const DialogLayout = ({ children }: { children: ReactNode }) => {
@@ -20,10 +20,10 @@ export const DialogLayout = ({ children }: { children: ReactNode }) => {
     sm:rounded-lg 
     overflow-hidden 
     lg:static lg:w-auto lg:h-auto lg:max-w-none lg:bg-transparent 
-    lg:shadow-none lg:flex-none lg:overflow-visible
+    lg:shadow-none lg:flex-none lg:overflow-visible lg:mb-10
   "
       >
-        <div className="flex justify-end p-4 sm:p-6 border-b">
+        <div className="flex justify-end p-4 sm:p-6">
           <button
             onClick={closeDialog}
             className="text-gray-500 hover:text-gray-700 cursor-pointer"

@@ -2,7 +2,7 @@ import { useUploadAssetMutation } from "@/services/assetApi";
 import { profileApi } from "@/services/profileApi";
 import { useAppDispatch } from "@/store/redux-hooks/useAppDispatch";
 import { useAppSelector } from "@/store/redux-hooks/useAppSelector";
-import { AssetType, OwnerType } from "@/types/assets"; // Adjust path
+import { AssetType, OwnerType } from "@/types/assets";
 
 const assetOwnerMap: Record<AssetType, OwnerType> = {
   [AssetType.COVER]: OwnerType.USER,

@@ -19,7 +19,7 @@ export const Sidebar = () => {
     <>
       <div className="hidden md:block w-[275px] border-r border-gray-200 bg-white h-screen sticky top-0">
         <div className="p-6">
-          <h1 className="text-2xl font-bold mb-8">AdCommunity</h1>
+          <h1 className="text-2xl font-bold mb-8">AdNetwork</h1>
           <nav className="space-y-2">
             {navItems.map((item) => {
               const Icon = item.icon;

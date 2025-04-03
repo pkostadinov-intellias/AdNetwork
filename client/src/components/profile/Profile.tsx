@@ -7,8 +7,9 @@ import { ProfileInfoSection } from "./ProfileInfoSection";
 import { useAppDispatch } from "@/store/redux-hooks/useAppDispatch";
 import { useLogoutMutation } from "@/services/authApi";
 import { logoutUser } from "@/store/slices/authSlice";
-import { DialogType, useDialog } from "@/contexts/DialogContext";
 import { ProfilePosts } from "./ProfilePosts";
+import { useDialog } from "@/hooks/useDialog";
+import { DialogType } from "@/types/dialog";
 
 export const Profile = () => {
   const { username } = useParams();

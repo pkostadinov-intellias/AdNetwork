@@ -46,10 +46,6 @@ export const updatePostSchema = {
       minLength: 1,
       maxLength: 250
     },
-    mediaUrl: {
-      type: "string",
-      format: "uri"
-    },
     visibility: {
       type: "string",
       enum: Object.values(PostVisibility)
@@ -59,7 +55,6 @@ export const updatePostSchema = {
   errorMessage: {
     properties: {
       content: "Content must be between 1 and 250 characters.",
-      mediaUrl: "Media URL must be a valid URI.",
       visibility: `Visibility must be one of: ${Object.values(PostVisibility).join(", ")}.`
     }
   }

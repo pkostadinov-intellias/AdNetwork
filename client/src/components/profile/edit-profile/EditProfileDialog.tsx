@@ -1,4 +1,3 @@
-import { useDialog } from "@/contexts/DialogContext";
 import { DialogLayout } from "@/layouts/DialogLayout";
 import ProfileCover from "../ProfileCover";
 import { ProfileAvatar } from "../ProfileAvatar";
@@ -6,6 +5,7 @@ import { EditProfileForm, ProfileFormData } from "./EditProfileForm";
 import { profileApi, useUpdateUserMutation } from "@/services/profileApi";
 import { useAppDispatch } from "@/store/redux-hooks/useAppDispatch";
 import { useState } from "react";
+import { useDialog } from "@/hooks/useDialog";
 
 interface EditProfileDialogProps {
   profileId: string;

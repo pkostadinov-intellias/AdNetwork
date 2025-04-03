@@ -7,7 +7,8 @@ import {
   updatePostService,
   deletePostService,
   toggleLikeService,
-  createCommentService
+  createCommentService,
+  deleteCommentService
 } from "./post.service";
 import { getXUserHeader } from "../../../utils/helper";
 import createHttpError from "http-errors";
@@ -51,7 +52,6 @@ export const createPost = async (ctx: Context) => {
   ctx.body = post;
 };
 
-//TODO NEED REFACTOR updatePost TO HANDLE IMAGES
 export const updatePost = async (ctx: Context) => {
   const updated = await updatePostService(ctx.params.id, ctx.request.body);
   ctx.body = updated;
@@ -72,6 +72,14 @@ export const createComment = async (ctx: Context) => {
 
   ctx.status = 201;
   ctx.body = comment;
+};
+
+export const deleteComment = async (ctx: Context) => {
+  const commentId = ctx.params.commentId;
+
+  await deleteCommentService(commentId);
+
+  ctx.status = 204;
 };
 
 export const toggleLike = async (ctx: Context) => {

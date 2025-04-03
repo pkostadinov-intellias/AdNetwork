@@ -10,12 +10,14 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { useCreatePostMutation } from "@/services/postApi";
+import { PostVisibility } from "@/types/post";
+import { getVisibilityLabel } from "./usePostForm";
 
-type PostVisibility = "public" | "connections" | "private.";
-
-const CreatePostForm = () => {
+export const PostForm = () => {
   const [content, setContent] = useState("");
-  const [visibility, setVisibility] = useState<PostVisibility>("public");
+  const [visibility, setVisibility] = useState<PostVisibility>(
+    PostVisibility.PUBLIC
+  );
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -40,7 +42,7 @@ const CreatePostForm = () => {
     try {
       await createPost(formData).unwrap();
       setContent("");
-      setVisibility("public");
+      setVisibility(PostVisibility.PUBLIC);
       setMediaFile(null);
       setPreviewUrl(null);
     } catch (err) {
@@ -53,26 +55,22 @@ const CreatePostForm = () => {
   };
 
   return (
-    <div className="rounded-lg p-4 space-y-4">
+    <div className="rounded-lg p-4 space-y-4 bg-white">
       <h1 className="text-2xl font-bold mb-8 text-center">Create a Post</h1>
 
       <Select
         value={visibility}
-        onValueChange={(val) => setVisibility(val as PostVisibility)}
+        onValueChange={(val: PostVisibility) => setVisibility(val)}
       >
         <SelectTrigger>
           <SelectValue placeholder="Visibility" />
         </SelectTrigger>
         <SelectContent>
-          {["public", "connections", "private"].map((v) => (
+          {Object.values(PostVisibility).map((v) => (
             <SelectItem key={v} value={v}>
-              {v === "public"
-                ? "Public"
-                : v === "connections"
-                ? "Connections"
-                : "Private"}
+              {getVisibilityLabel(v)}
             </SelectItem>
-          ))}
+          ))}{" "}
         </SelectContent>
       </Select>
 
@@ -125,5 +123,3 @@ const CreatePostForm = () => {
     </div>
   );
 };
-
-export default CreatePostForm;

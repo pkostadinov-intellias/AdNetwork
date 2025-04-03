@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import { ProfileView } from "@/views/profile/ProfileView";
@@ -11,21 +11,19 @@ const NotFoundView = lazy(() => import("@/views/not-found/NotFoundView"));
 
 export const AppRoutes = () => {
   return (
-    <Router>
-      <Suspense fallback={<div className="text-center mt-10">Loading...</div>}>
-        <Routes>
-          <Route path="/auth/login" element={<LoginView />} />
-          <Route path="/auth/register" element={<RegisterView />} />
+    <Suspense fallback={<div className="text-center mt-10">Loading...</div>}>
+      <Routes>
+        <Route path="/auth/login" element={<LoginView />} />
+        <Route path="/auth/register" element={<RegisterView />} />
 
-          <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<HomeView />} />
-            <Route path="/profile/:username" element={<ProfileView />} />
-            <Route path="/posts/create" element={<CreatePostView />} />
-          </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<HomeView />} />
+          <Route path="/profile/:username" element={<ProfileView />} />
+          <Route path="/posts/create" element={<CreatePostView />} />
+        </Route>
 
-          <Route path="*" element={<NotFoundView />} />
-        </Routes>
-      </Suspense>
-    </Router>
+        <Route path="*" element={<NotFoundView />} />
+      </Routes>
+    </Suspense>
   );
 };

@@ -32,7 +32,6 @@ export const postApi = createApi({
         method: "POST",
         body: formData
       })
-      // invalidatesTags: [TAG]
     }),
 
     updatePost: builder.mutation<Post, { id: string; data: UpdatePostPayload }>(
@@ -42,7 +41,7 @@ export const postApi = createApi({
           method: "PATCH",
           body: data
         }),
-        invalidatesTags: (result, error, { id }) => [{ type: TAG, id }, TAG]
+        invalidatesTags: (result, error, { id }) => [{ type: TAG, id }]
       }
     ),
 
@@ -51,7 +50,7 @@ export const postApi = createApi({
         url: `${ENDPOINT}/${id}`,
         method: "DELETE"
       }),
-      invalidatesTags: (result, error, id) => [{ type: TAG, id }, TAG]
+      invalidatesTags: (result, error, id) => [{ type: TAG, id }]
     }),
 
     toggleLike: builder.mutation<{ liked: boolean }, string>({
@@ -71,7 +70,22 @@ export const postApi = createApi({
         method: "POST",
         body: data
       }),
-      invalidatesTags: [TAG]
+      invalidatesTags: (result, error, { postId }) => [
+        { type: TAG, id: postId }
+      ]
+    }),
+
+    deleteComment: builder.mutation<
+      void,
+      { postId: string; commentId: string }
+    >({
+      query: ({ postId, commentId }) => ({
+        url: `${ENDPOINT}/${postId}/comments/${commentId}`,
+        method: "DELETE"
+      }),
+      invalidatesTags: (result, error, { postId }) => [
+        { type: TAG, id: postId }
+      ]
     })
   })
 });
@@ -84,5 +98,6 @@ export const {
   useUpdatePostMutation,
   useDeletePostMutation,
   useToggleLikeMutation,
-  useCreateCommentMutation
+  useCreateCommentMutation,
+  useDeleteCommentMutation
 } = postApi;

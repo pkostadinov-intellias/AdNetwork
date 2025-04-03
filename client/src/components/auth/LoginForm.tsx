@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import { useLogin } from "../../hooks/auth/useLogin";
 import { TextField } from "../ui/TextField";
+import { useLoginForm } from "./useLoginForm";
 
 const LoginForm = () => {
   const { control, handleSubmit, isSubmitting, errors, loginError } =
-    useLogin();
+    useLoginForm();
 
   return (
     <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">

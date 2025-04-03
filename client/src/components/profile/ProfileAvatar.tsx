@@ -1,5 +1,5 @@
 import { Camera } from "lucide-react";
-import { useAssets } from "@/hooks/assets/useAssets";
+import { useAssets } from "@/hooks/useAssets";
 import { AssetType } from "@/types/assets";
 import ClipLoader from "react-spinners/ClipLoader";
 

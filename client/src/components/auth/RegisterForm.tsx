@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { useRegister } from "../../hooks/auth/useRegister";
 import { TextField } from "../ui/TextField";
 import { SelectField } from "../ui/SelectField";
+import { useRegisterForm } from "./useRegisterForm";
 
 const RegisterForm = () => {
   const {
@@ -11,7 +11,7 @@ const RegisterForm = () => {
     errors,
     roleOptions,
     registerError
-  } = useRegister();
+  } = useRegisterForm();
 
   return (
     <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
