@@ -50,7 +50,7 @@ export const postApi = createApi({
         url: `${ENDPOINT}/${id}`,
         method: "DELETE"
       }),
-      invalidatesTags: (result, error, id) => [{ type: TAG, id }]
+      invalidatesTags: (result, error, id) => [{ type: TAG, id }, TAG]
     }),
 
     toggleLike: builder.mutation<{ liked: boolean }, string>({
