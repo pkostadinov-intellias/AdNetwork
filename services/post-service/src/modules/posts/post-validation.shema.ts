@@ -68,16 +68,19 @@ export const updatePostSchema = {
 export const createCommentSchema = {
   type: "object",
   properties: {
-    content: { type: "string", minLength: 1, maxLength: 500 }
+    content: { type: "string", minLength: 1, maxLength: 500 },
+    username: { type: "string", minLength: 2, maxLength: 25 }
   },
   required: ["content"],
   additionalProperties: false,
   errorMessage: {
     properties: {
-      content: "Comment content must be between 1 and 500 characters."
+      content: "Comment content must be between 1 and 500 characters.",
+      username: "Username must be between 2 and 25 characteres."
     },
     required: {
-      content: "Comment content is required."
+      content: "Comment content is required.",
+      username: "Username is required."
     }
   }
 };

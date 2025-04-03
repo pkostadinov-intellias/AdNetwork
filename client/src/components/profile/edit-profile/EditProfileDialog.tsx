@@ -52,7 +52,7 @@ const EditProfileDialog = ({
 
   return (
     <DialogLayout>
-      <div>
+      <div className="bg-white p-4 rounded-2xl">
         <h3 className="text-lg font-medium leading-6 text-gray-900 pb-6">
           Edit Profile
         </h3>

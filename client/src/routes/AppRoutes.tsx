@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import { ProfileView } from "@/views/profile/ProfileView";
+import { CreatePostView } from "@/views/posts/CreatePostView";
 
 const LoginView = lazy(() => import("@/views/auth/LoginView"));
 const RegisterView = lazy(() => import("@/views/auth/RegisterView"));
@@ -19,6 +20,7 @@ export const AppRoutes = () => {
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<HomeView />} />
             <Route path="/profile/:username" element={<ProfileView />} />
+            <Route path="/posts/create" element={<CreatePostView />} />
           </Route>
 
           <Route path="*" element={<NotFoundView />} />

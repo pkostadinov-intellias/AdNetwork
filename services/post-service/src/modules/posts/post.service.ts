@@ -132,12 +132,18 @@ export const deletePostService = async (
 export const createCommentService = async (
   postId: string,
   userId: string,
+  username: string,
   content: string
 ) => {
   const post = await postRepository.findOneBy({ id: postId });
   if (!post) throw new createHttpError.NotFound("Post not found");
 
-  const newComment = commentRepository.create({ userId, content, post });
+  const newComment = commentRepository.create({
+    userId,
+    username,
+    content,
+    post
+  });
   return await commentRepository.save(newComment);
 };
 

@@ -52,10 +52,6 @@ function ProfileCard() {
 
         <div className="flex justify-center gap-8 w-full border-t border-gray-100 pt-4">
           <div className="text-center">
-            <p className="font-bold text-lg">{profile.posts}</p>
-            <p className="text-gray-600 text-sm">Posts</p>
-          </div>
-          <div className="text-center">
             <p className="font-bold text-lg">{profile.connections}</p>
             <p className="text-gray-600 text-sm">Connections</p>
           </div>

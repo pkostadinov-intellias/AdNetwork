@@ -19,7 +19,6 @@ export const ProfileInfoSection = ({
   role,
   profession,
   bio,
-  postsCount,
   connectionsCount,
   canEdit = false,
   onEditProfile,
@@ -46,9 +45,6 @@ export const ProfileInfoSection = ({
       </div>
 
       <div className="flex gap-8 mb-4">
-        <span>
-          <strong>{postsCount}</strong> posts
-        </span>
         <span>
           <strong>{connectionsCount}</strong> connections
         </span>
