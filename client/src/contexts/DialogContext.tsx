@@ -23,7 +23,7 @@ export const DialogProvider = ({ children }: { children: React.ReactNode }) => {
     <DialogContext.Provider value={{ type, data, openDialog, closeDialog }}>
       {children}
 
-      {type === DialogType.EDIT_POST && <EditPostDialog />}
+      {type === DialogType.EDIT_POST && <EditPostDialog post={data} />}
       {type === DialogType.POST_WITH_COMMENTS && (
         <PostWithCommentsDialog postId={data.postId} userId={data.userId} />
       )}

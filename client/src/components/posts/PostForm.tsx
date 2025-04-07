@@ -1,4 +1,6 @@
-import { useRef, useState } from "react";
+import { FC, useRef } from "react";
+import { usePostForm, getVisibilityLabel } from "./usePostForm";
+import { Post, PostVisibility } from "@/types/post";
 import { ImageIcon } from "lucide-react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,54 +11,38 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import { useCreatePostMutation } from "@/services/postApi";
-import { PostVisibility } from "@/types/post";
-import { getVisibilityLabel } from "./usePostForm";
 
-export const PostForm = () => {
-  const [content, setContent] = useState("");
-  const [visibility, setVisibility] = useState<PostVisibility>(
-    PostVisibility.PUBLIC
-  );
-  const [mediaFile, setMediaFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+type PostFormProps = {
+  type: "create" | "edit";
+  initialData?: Post;
+  onSuccess?: () => void;
+};
 
+export const PostForm: FC<PostFormProps> = ({
+  type,
+  initialData,
+  onSuccess
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [createPost, { isLoading }] = useCreatePostMutation();
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setMediaFile(file);
-    setPreviewUrl(URL.createObjectURL(file));
-  };
+  const {
+    content,
+    setContent,
+    visibility,
+    setVisibility,
+    previewUrl,
+    handleImageChange,
+    handleSubmit,
+    isLoading
+  } = usePostForm({ type, initialData, onSuccess });
 
-  const handleSubmit = async () => {
-    if (!content.trim()) return;
-
-    const formData = new FormData();
-    formData.append("content", content);
-    formData.append("visibility", visibility);
-    if (mediaFile) formData.append("file", mediaFile);
-
-    try {
-      await createPost(formData).unwrap();
-      setContent("");
-      setVisibility(PostVisibility.PUBLIC);
-      setMediaFile(null);
-      setPreviewUrl(null);
-    } catch (err) {
-      console.error("Failed to create post:", err);
-    }
-  };
-
-  const triggerFileInput = () => {
-    fileInputRef.current?.click();
-  };
+  const triggerFileInput = () => fileInputRef.current?.click();
 
   return (
     <div className="rounded-lg p-4 space-y-4 bg-white">
-      <h1 className="text-2xl font-bold mb-8 text-center">Create a Post</h1>
+      <h1 className="text-2xl font-bold mb-8 text-center">
+        {type === "edit" ? "Edit Post" : "Create a Post"}
+      </h1>
 
       <Select
         value={visibility}
@@ -70,41 +56,66 @@ export const PostForm = () => {
             <SelectItem key={v} value={v}>
               {getVisibilityLabel(v)}
             </SelectItem>
-          ))}{" "}
+          ))}
         </SelectContent>
       </Select>
 
-      <div
-        className="relative w-full aspect-video rounded-md overflow-hidden border cursor-pointer"
-        onClick={triggerFileInput}
-      >
-        {previewUrl ? (
+      {previewUrl && (
+        <div
+          className={`relative w-full aspect-video rounded-md overflow-hidden border ${
+            type === "create" ? "cursor-pointer" : ""
+          }`}
+          onClick={type === "create" ? triggerFileInput : undefined}
+        >
           <img
             src={previewUrl}
             alt="Preview"
             className="w-full h-full object-cover"
           />
-        ) : (
+
+          {type === "create" && (
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageChange}
+            />
+          )}
+
+          {isLoading && (
+            <div className="absolute inset-0 bg-white bg-opacity-60 flex items-center justify-center">
+              <ClipLoader color="#000" size={30} />
+            </div>
+          )}
+        </div>
+      )}
+
+      {type === "create" && !previewUrl && (
+        <div
+          className="relative w-full aspect-video rounded-md overflow-hidden border cursor-pointer"
+          onClick={triggerFileInput}
+        >
           <div className="w-full h-full flex flex-col items-center justify-center text-gray-500">
             <ImageIcon size={32} />
             <span className="text-sm mt-2">Click to add an image</span>
           </div>
-        )}
 
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={handleImageChange}
-        />
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleImageChange}
+          />
 
-        {isLoading && (
-          <div className="absolute inset-0 bg-white bg-opacity-60 flex items-center justify-center">
-            <ClipLoader color="#000" size={30} />
-          </div>
-        )}
-      </div>
+          {isLoading && (
+            <div className="absolute inset-0 bg-white bg-opacity-60 flex items-center justify-center">
+              <ClipLoader color="#000" size={30} />
+            </div>
+          )}
+        </div>
+      )}
 
       <Textarea
         placeholder="What's on your mind?"
@@ -118,7 +129,13 @@ export const PostForm = () => {
         disabled={isLoading}
         className="w-full bg-blue-500 text-white py-2 rounded-md font-medium hover:bg-opacity-90 transition disabled:opacity-50"
       >
-        {isLoading ? "Posting..." : "Post"}
+        {isLoading
+          ? type === "edit"
+            ? "Updating..."
+            : "Posting..."
+          : type === "edit"
+          ? "Update"
+          : "Post"}
       </button>
     </div>
   );

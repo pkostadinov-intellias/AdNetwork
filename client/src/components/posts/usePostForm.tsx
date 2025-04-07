@@ -1,3 +1,4 @@
+import { useDialog } from "@/hooks/useDialog";
 import {
   useCreatePostMutation,
   useUpdatePostMutation
@@ -18,11 +19,26 @@ export const getVisibilityLabel = (v: PostVisibility) => {
   }
 };
 
-export const usePostForm = ({ type, initialData, onSuccess }) => {
+export const usePostForm = ({
+  type,
+  initialData,
+  onSuccess
+}: {
+  type: "create" | "edit";
+  initialData?: {
+    id?: string;
+    content?: string;
+    visibility?: PostVisibility;
+    mediaUrl?: string;
+  };
+  onSuccess?: () => void;
+}) => {
   const [content, setContent] = useState(initialData?.content || "");
   const [visibility, setVisibility] = useState<PostVisibility>(
-    initialData?.visibility || "public"
+    initialData?.visibility || PostVisibility.PUBLIC
   );
+
+  const { closeDialog } = useDialog();
 
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(
@@ -45,26 +61,27 @@ export const usePostForm = ({ type, initialData, onSuccess }) => {
   const handleSubmit = async () => {
     if (!content.trim()) return;
 
-    const formData = new FormData();
-    formData.append("content", content);
-    formData.append("visibility", visibility);
-    if (type === "create" && mediaFile) {
-      formData.append("file", mediaFile);
-    }
-
     try {
       if (type === "create") {
+        const formData = new FormData();
+        formData.append("content", content);
+        formData.append("visibility", visibility);
+        if (mediaFile) {
+          formData.append("file", mediaFile);
+        }
         await createPost(formData).unwrap();
-      } else if (type === "edit" && initialData?.id) {
-        await updatePost({ id: initialData.id, data: formData }).unwrap();
-      }
 
-      // Reset only after create
-      if (type === "create") {
         setContent("");
-        setVisibility("public");
+        setVisibility(PostVisibility.PUBLIC);
         setMediaFile(null);
         setPreviewUrl(null);
+      } else if (type === "edit" && initialData?.id) {
+        const data = {
+          content,
+          visibility
+        };
+        await updatePost({ id: initialData.id, data }).unwrap();
+        closeDialog();
       }
 
       onSuccess?.();

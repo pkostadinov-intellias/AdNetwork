@@ -23,7 +23,7 @@ export enum PostVisibility {
 export interface Post {
   id: string;
   userId: string;
-  content: string | null;
+  content: string;
   mediaUrl: string;
   visibility: PostVisibility;
   originalPostId?: string | null;
