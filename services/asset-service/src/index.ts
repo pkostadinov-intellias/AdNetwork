@@ -15,7 +15,8 @@ app.use(
   koaBody({
     multipart: true,
     formidable: {
-      keepExtensions: true
+      keepExtensions: true,
+      maxFileSize: 5 * 1024 * 1024 //5mb
     }
   })
 );
