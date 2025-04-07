@@ -92,8 +92,6 @@ services:
       JWT_SECRET: ${JWT_SECRET}
     env_file:
       - .env
-    ports:
-      - "4000:4000"
     volumes:
       - ./services/user-service:/app
       - /app/node_modules
@@ -117,8 +115,6 @@ services:
       JWT_SECRET: ${JWT_SECRET}
     env_file:
       - .env
-    ports:
-      - "4001:4001"
     volumes:
       - ./services/post-service:/app
       - /app/node_modules
@@ -144,8 +140,6 @@ services:
       JWT_SECRET: ${JWT_SECRET}
     env_file:
       - .env
-    ports:
-      - "4002:4002"
     volumes:
       - ./services/asset-service:/app
       - /app/node_modules
