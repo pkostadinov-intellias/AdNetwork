@@ -4,28 +4,51 @@ import {
   likeRepository,
   postRepository
 } from "../../config/database";
-import { Post } from "../../entities/Post";
+import { Post, PostVisibility } from "../../entities/Post";
 import type { File as FormidableFile } from "formidable";
 import axios from "axios";
 import fs from "fs";
 import { config } from "../../config/config";
 import FormData from "form-data";
 import { validateUserExists } from "../../../utils/helper";
+import { Brackets } from "typeorm";
 
-export const getAllPostsService = async () => {
-  const posts = await postRepository.find({
-    relations: ["likes", "comments"],
-    order: { createdAt: "DESC" }
-  });
+export const getAllPostsService = async (currentUserId: string) => {
+  const posts = postRepository
+    .createQueryBuilder("post")
+    .leftJoinAndSelect("post.likes", "like")
+    .leftJoinAndSelect("post.comments", "comment")
+    .where("post.visibility = :public", { public: PostVisibility.PUBLIC });
 
-  return posts;
+  if (currentUserId) {
+    posts.orWhere("post.visibility = :private AND post.userId = :userId", {
+      private: PostVisibility.PRIVATE,
+      userId: currentUserId
+    });
+  }
+
+  return posts.orderBy("post.createdAt", "DESC").getMany();
 };
 
-export const getPostByIdService = async (id: string) => {
-  const post = await postRepository.findOne({
-    where: { id },
-    relations: ["likes", "comments"]
-  });
+export const getPostByIdService = async (id: string, currentUserId: string) => {
+  const post = postRepository
+    .createQueryBuilder("post")
+    .leftJoinAndSelect("post.likes", "like")
+    .leftJoinAndSelect("post.comments", "comment")
+    .where("post.id = :id", { id })
+    .andWhere(
+      new Brackets((qb) =>
+        qb
+          .where("post.visibility = :public", {
+            public: PostVisibility.PUBLIC
+          })
+          .orWhere("post.visibility = :private AND post.userId = :userId", {
+            private: PostVisibility.PRIVATE,
+            userId: currentUserId
+          })
+      )
+    )
+    .getOne();
 
   if (!post) {
     throw new createHttpError.NotFound("Post not found");
@@ -34,14 +57,35 @@ export const getPostByIdService = async (id: string) => {
   return post;
 };
 
-export const getPostsByUserIdService = async (userId: string) => {
-  const posts = await postRepository.find({
-    where: { userId },
-    relations: ["likes", "comments"],
-    order: { createdAt: "DESC" }
-  });
+export const getPostsByUserIdService = async (
+  userId: string,
+  currentUserId: string
+) => {
+  const isOwner = userId === currentUserId;
 
-  return posts;
+  const postQuery = postRepository
+    .createQueryBuilder("post")
+    .where("post.userId = :userId", { userId });
+
+  if (isOwner) {
+    postQuery.andWhere(
+      new Brackets((qb) =>
+        qb
+          .where("post.visibility = :public", {
+            public: PostVisibility.PUBLIC
+          })
+          .orWhere("post.visibility = :private", {
+            private: PostVisibility.PRIVATE
+          })
+      )
+    );
+  } else {
+    postQuery.andWhere("post.visibility = :public", {
+      public: PostVisibility.PUBLIC
+    });
+  }
+
+  return postQuery.orderBy("post.createdAt", "DESC").getMany();
 };
 
 export const createPostService = async (

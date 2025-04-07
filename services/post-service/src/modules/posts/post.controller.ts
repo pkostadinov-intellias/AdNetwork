@@ -14,17 +14,20 @@ import { getXUserHeader } from "../../../utils/helper";
 import createHttpError from "http-errors";
 
 export const getAllPosts = async (ctx: Context) => {
-  const posts = await getAllPostsService();
+  const posts = await getAllPostsService(ctx.state.user.id);
   ctx.body = posts;
 };
 
 export const getPostById = async (ctx: Context) => {
-  const post = await getPostByIdService(ctx.params.id);
+  const post = await getPostByIdService(ctx.params.id, ctx.state.user.id);
   ctx.body = post;
 };
 
 export const getPostsByUserId = async (ctx: Context) => {
-  const posts = await getPostsByUserIdService(ctx.params.userId);
+  const posts = await getPostsByUserIdService(
+    ctx.params.userId,
+    ctx.state.user.id
+  );
   ctx.body = posts;
 };
 
