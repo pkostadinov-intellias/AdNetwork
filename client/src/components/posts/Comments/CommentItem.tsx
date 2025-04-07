@@ -13,7 +13,7 @@ export const CommentItem: FC<CommentItemProps> = ({ comment, postId }) => {
   const authUser = useAppSelector((state) => state.auth.user);
   const isOwner = authUser ? comment.userId === authUser.id : false;
 
-  const [deleteComment, { isLoading: isDeleting }] = useDeleteCommentMutation();
+  const [deleteComment] = useDeleteCommentMutation();
 
   return (
     <div className="flex flex-col space-y-1">
