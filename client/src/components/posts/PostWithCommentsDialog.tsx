@@ -115,7 +115,11 @@ export const PostWithCommentsDialog: FC<PostWithCommentsProps> = ({
             </form>
 
             {post.comments.map((comment) => (
-              <CommentItem comment={comment} postId={post.id} />
+              <CommentItem
+                key={comment.id}
+                comment={comment}
+                postId={post.id}
+              />
             ))}
           </div>
         </div>

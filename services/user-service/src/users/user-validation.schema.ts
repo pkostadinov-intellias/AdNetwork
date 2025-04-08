@@ -48,11 +48,6 @@ export const createUserSchema = {
       maxLength: 1000,
       nullable: true,
     },
-    posts: {
-      type: 'integer',
-      minimum: 0,
-      default: 0,
-    },
     connections: {
       type: 'integer',
       minimum: 0,
@@ -72,7 +67,6 @@ export const createUserSchema = {
       fullName: 'Full name must be between 2 and 50 characters.',
       profession: 'Profession must be between 2 and 50 characters.',
       biography: 'Biography must be less than 1000 characters.',
-      posts: 'Posts must be a positive integer.',
       connections: 'Connections must be a positive integer.',
     },
     required: {
@@ -95,7 +89,6 @@ export const updateUserSchema = {
     fullName: { type: 'string', minLength: 2, maxLength: 50, nullable: true },
     profession: { type: 'string', minLength: 2, maxLength: 50, nullable: true },
     biography: { type: 'string', maxLength: 1000, nullable: true },
-    posts: { type: 'integer', minimum: 0 },
     connections: { type: 'integer', minimum: 0 },
   },
   additionalProperties: false,
@@ -109,7 +102,6 @@ export const updateUserSchema = {
       fullName: 'Full name must be between 2 and 50 characters.',
       profession: 'Profession must be between 2 and 50 characters.',
       biography: 'Biography must be less than 1000 characters.',
-      posts: 'Posts must be a positive integer.',
       connections: 'Connections must be a positive integer.',
     },
   },

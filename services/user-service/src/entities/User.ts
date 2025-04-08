@@ -45,9 +45,6 @@ export class User {
   biography: string
 
   @Column({ type: 'int', default: 0 })
-  posts: number
-
-  @Column({ type: 'int', default: 0 })
   connections: number
 
   @CreateDateColumn()

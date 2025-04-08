@@ -17,8 +17,8 @@ import {
   createPostSchema,
   updatePostSchema
 } from "./post-validation.shema";
-import { authorizeUserOrAdmin } from "../../middleware/authorize-user-admin.middleware";
 import { authorizeOwnerOrAdmin } from "../../middleware/authorize-owner-admin.middleware";
+import { authorizeCommentOwnerOrAdmin } from "../../middleware/authorize-comment-owner-admin.middleware";
 
 export const postRouter = new Router();
 
@@ -39,12 +39,13 @@ postRouter.delete("/posts/:id", authorizeOwnerOrAdmin, deletePost);
 postRouter.post(
   "/posts/:id/comments",
   validatorMiddleware(createCommentSchema),
+  authorizeOwnerOrAdmin,
   createComment
 );
 
 postRouter.delete(
   "/posts/:id/comments/:commentId",
-  authorizeUserOrAdmin,
+  authorizeCommentOwnerOrAdmin,
   deleteComment
 );
 
