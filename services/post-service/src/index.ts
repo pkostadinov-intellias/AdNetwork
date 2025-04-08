@@ -6,6 +6,7 @@ import { errorHandlerMiddleware } from "./middleware/error-handler.middleware";
 import koaBody from "koa-body";
 import { extractUserMiddleware } from "./middleware/extract-user.middleware";
 import { postRouter } from "./modules/posts/post.routes";
+import { connectRabbitMQ } from "./config/rabbitmq";
 
 const app = new Koa();
 const router = new Router({
@@ -37,6 +38,7 @@ app.use(router.routes()).use(router.allowedMethods());
 const startServer = async () => {
   try {
     await connectDatabase();
+    await connectRabbitMQ();
     app.listen(config.PORT, () => {
       console.log(`Post Service is running on http://localhost:${config.PORT}`);
     });

@@ -15,6 +15,7 @@ export const config = {
     USERS: '/api/v1/users',
     POSTS: '/api/v1/posts',
     ASSETS: '/api/v1/assets',
+    SEARCH: '/api/v1/search',
   },
   REDIS_URL:
     process.env.REDIS_HOST && process.env.REDIS_PORT
@@ -34,9 +35,14 @@ if (!process.env.ASSET_SERVICE_URL) {
   throw new Error('ASSET_SERVICE_URL missing in environment file')
 }
 
+if (!process.env.SEARCH_SERVICE_URL) {
+  throw new Error('SEARCH_SERVICE_URL missing in environment file')
+}
+
 export const SERVICES: Record<string, string> = {
   [config.ROUTE_PATHS.AUTH]: process.env.USER_SERVICE_URL,
   [config.ROUTE_PATHS.USERS]: process.env.USER_SERVICE_URL,
   [config.ROUTE_PATHS.POSTS]: process.env.POST_SERVICE_URL,
   [config.ROUTE_PATHS.ASSETS]: process.env.ASSET_SERVICE_URL,
+  [config.ROUTE_PATHS.SEARCH]: process.env.SEARCH_SERVICE_URL,
 }

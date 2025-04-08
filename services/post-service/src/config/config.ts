@@ -22,5 +22,9 @@ export const config = {
   },
   ASSET_SERVICE_ENDPOINT: process.env.ASSET_SERVICE_ENDPOINT,
   USER_SERVICE_ENDPOINT: process.env.USER_SERVICE_ENDPOINT,
-  JWT_SECRET: process.env.JWT_SECRET
+  JWT_SECRET: process.env.JWT_SECRET,
+  RABBITMQ_URL:
+    process.env.RABBITMQ_HOST && process.env.RABBITMQ_PORT
+      ? `amqp://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}:${process.env.RABBITMQ_PORT}`
+      : undefined
 };

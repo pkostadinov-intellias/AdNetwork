@@ -8,7 +8,7 @@ import {
   getUserWithPasswordByUsername,
 } from '../users/users.service'
 import { createToken, invalidateToken } from '../utils/token'
-import { publishUserRegistered } from '../events/producer'
+import { publishUserIndex } from '../events/producer'
 
 export const registerUser = async (
   username: string,
@@ -27,7 +27,11 @@ export const registerUser = async (
 
   const token = await createToken(newUser)
 
-  await publishUserRegistered({ id: newUser.id, username: newUser.username })
+  await publishUserIndex({
+    id: newUser.id,
+    username: newUser.username,
+    fullName: newUser.fullName,
+  })
 
   return { user: omit(newUser, ['password']), token }
 }

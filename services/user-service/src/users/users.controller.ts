@@ -8,6 +8,7 @@ import {
   updateUserService,
 } from './users.service'
 import { User } from '../entities/User'
+import { deleteUserIndex, publishUserIndex } from '../events/producer'
 
 export const getUsers = async (ctx: Context) => {
   ctx.body = await getUsersService()
@@ -30,11 +31,30 @@ export const createUser = async (ctx: Context) => {
 
 export const updateUser = async (ctx: Context) => {
   const { id } = ctx.params
-  ctx.body = await updateUserService(id, ctx.request.body as Partial<User>)
+
+  const updatedUser = await updateUserService(
+    id,
+    ctx.request.body as Partial<User>,
+  )
+
+  if (!updatedUser) {
+    return
+  }
+
+  await publishUserIndex({
+    id: updatedUser.id,
+    username: updatedUser.username,
+    fullName: updatedUser.fullName,
+  })
+
+  ctx.body = updatedUser
 }
 
 export const deleteUser = async (ctx: Context) => {
   const { id } = ctx.params
   await deleteUserService(id)
+
+  await deleteUserIndex(id)
+
   ctx.status = 204
 }

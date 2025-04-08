@@ -8,6 +8,7 @@ import { authRouter } from './routes/auth.routes'
 import { userRouter } from './routes/user.routes'
 import { assetRouter } from './routes/asset.routes'
 import { postRouter } from './routes/post.routes'
+import { searchRouter } from './routes/search.routes'
 
 const app = new Koa()
 const router = new Router()
@@ -22,6 +23,7 @@ router.use(verifyToken)
 router.use(userRouter.routes())
 router.use(assetRouter.routes())
 router.use(postRouter.routes())
+router.use(searchRouter.routes())
 
 app.use(router.routes())
 app.use(router.allowedMethods())

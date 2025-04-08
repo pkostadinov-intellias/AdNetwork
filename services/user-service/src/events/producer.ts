@@ -1,19 +1,34 @@
 import { channel } from '../config/rabbitmq'
 import { QUEUE_NAMES } from '../utils/constant'
 
-export const publishUserRegistered = async (user: {
+interface IPublishUserIndex {
   id: string
   username: string
-}) => {
+  fullName: string
+}
+
+export const publishUserIndex = async (user: IPublishUserIndex) => {
   if (!channel) {
     console.error('RabbitMQ channel is not initialized')
   }
 
   channel.sendToQueue(
-    QUEUE_NAMES.USER_REGISTERED,
+    QUEUE_NAMES.SEARCH_USER_INDEXED,
     Buffer.from(JSON.stringify(user)),
     { persistent: true },
   )
+}
 
-  console.log('User registration event published:', user)
+export const deleteUserIndex = async (id: string) => {
+  if (!channel) {
+    console.error('RabbitMQ channel is not initialized')
+  }
+
+  channel.sendToQueue(
+    QUEUE_NAMES.SEARCH_USER_DELETED,
+    Buffer.from(JSON.stringify({ id })),
+    {
+      persistent: true,
+    },
+  )
 }

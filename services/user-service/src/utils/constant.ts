@@ -1,3 +1,4 @@
 export const QUEUE_NAMES = {
-  USER_REGISTERED: 'user_registered',
+  SEARCH_USER_INDEXED: 'search.user.indexed',
+  SEARCH_USER_DELETED: 'search.user.deleted',
 }

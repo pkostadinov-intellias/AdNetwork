@@ -71,6 +71,25 @@ services:
       retries: 5
       start_period: 30s
 
+  typesense:
+    image: typesense/typesense:28.0
+    container_name: typesense
+    restart: on-failure
+    ports:
+      - "8108:8108"
+    environment:
+      - TYPESENSE_API_KEY=${TYPESENSE_API_KEY}
+    env_file:
+      - .env
+    command: >
+      --data-dir /data
+      --api-key ${TYPESENSE_API_KEY}
+      --listen-port 8108
+    volumes:
+      - ./typesense-data:/data
+    networks:
+      - backend
+
   user-service:
     build: ./services/user-service
     container_name: user-service
@@ -105,7 +124,10 @@ services:
     container_name: post-service
     restart: always
     depends_on:
-      - postgres-post
+      rabbitmq:
+        condition: service_healthy
+      postgres-post:
+        condition: service_started
     environment:
       NODE_ENV: development
       POSTGRES_DB: ${POSTGRES_POST_DB}
@@ -164,6 +186,29 @@ services:
       - "3001:3001"
     volumes:
       - ./services/api-gateway:/app
+      - /app/node_modules
+    working_dir: /app
+    command: npm run dev
+    networks:
+      - backend
+
+  search-service:
+    build: ./services/search-service
+    container_name: search-service
+    restart: always
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      typesense:
+        condition: service_started
+    environment:
+      NODE_ENV: development
+      PORT: ${SEARCH_SERVICE_PORT}
+      JWT_SECRET: ${JWT_SECRET}
+    env_file:
+      - .env
+    volumes:
+      - ./services/search-service:/app
       - /app/node_modules
     working_dir: /app
     command: npm run dev

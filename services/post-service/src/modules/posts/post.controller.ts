@@ -12,6 +12,7 @@ import {
 } from "./post.service";
 import { getXUserHeader } from "../../../utils/helper";
 import createHttpError from "http-errors";
+import { deletePostIndex, publishPostIndex } from "../../events/producer";
 
 export const getAllPosts = async (ctx: Context) => {
   const posts = await getAllPostsService(ctx.state.user.id);
@@ -51,17 +52,32 @@ export const createPost = async (ctx: Context) => {
     userId
   );
 
+  await publishPostIndex({
+    id: post.id,
+    userId: post.userId,
+    content: post.content
+  });
+
   ctx.status = 201;
   ctx.body = post;
 };
 
 export const updatePost = async (ctx: Context) => {
-  const updated = await updatePostService(ctx.params.id, ctx.request.body);
-  ctx.body = updated;
+  const updatedPost = await updatePostService(ctx.params.id, ctx.request.body);
+
+  await publishPostIndex({
+    id: updatedPost.id,
+    userId: updatedPost.userId,
+    content: updatedPost.content
+  });
+
+  ctx.body = updatedPost;
 };
 
 export const deletePost = async (ctx: Context) => {
   await deletePostService(ctx.params.id, getXUserHeader(ctx));
+  await deletePostIndex(ctx.params.id);
+
   ctx.status = 204;
 };
 
