@@ -1,10 +1,12 @@
 import { Profile } from "@/components/profile/Profile";
 import { SidebarLayout } from "@/layouts/SidebarLayout";
 
-export const ProfileView = () => {
+const ProfileView = () => {
   return (
     <SidebarLayout>
       <Profile />
     </SidebarLayout>
   );
 };
+
+export default ProfileView;

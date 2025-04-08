@@ -1,13 +1,14 @@
 import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import ProtectedRoute from "@/routes/ProtectedRoute";
-import { ProfileView } from "@/views/profile/ProfileView";
-import { CreatePostView } from "@/views/posts/CreatePostView";
 
 const LoginView = lazy(() => import("@/views/auth/LoginView"));
 const RegisterView = lazy(() => import("@/views/auth/RegisterView"));
 const HomeView = lazy(() => import("@/views/home/HomeView"));
 const NotFoundView = lazy(() => import("@/views/not-found/NotFoundView"));
+const ProfileView = lazy(() => import("@/views/profile/ProfileView"));
+const CreatePostView = lazy(() => import("@/views/posts/CreatePostView"));
+const SearchView = lazy(() => import("@/views/search/SearchView"));
 
 export const AppRoutes = () => {
   return (
@@ -19,6 +20,7 @@ export const AppRoutes = () => {
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<HomeView />} />
           <Route path="/profile/:username" element={<ProfileView />} />
+          <Route path="/search" element={<SearchView />} />
           <Route path="/posts/create" element={<CreatePostView />} />
         </Route>
 
