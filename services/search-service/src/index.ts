@@ -7,6 +7,7 @@ import { initConsumer } from "./events/consumer";
 import { errorHandlerMiddleware } from "./middleware/error-handler.middleware";
 import { registerTypesenseCollections } from "./config/typesense/typesense";
 import { searchRouter } from "./search/search.routes";
+import { extractUserMiddleware } from "./middleware/extract-user.middleware";
 
 const app = new Koa();
 const router = new Router({
@@ -16,6 +17,8 @@ const router = new Router({
 app.use(errorHandlerMiddleware);
 
 app.use(bodyParser());
+
+app.use(extractUserMiddleware);
 
 router.use(searchRouter.routes());
 

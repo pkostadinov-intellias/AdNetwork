@@ -55,7 +55,8 @@ export const createPost = async (ctx: Context) => {
   await publishPostIndex({
     id: post.id,
     userId: post.userId,
-    content: post.content
+    content: post.content,
+    visibility: post.visibility
   });
 
   ctx.status = 201;
@@ -68,7 +69,8 @@ export const updatePost = async (ctx: Context) => {
   await publishPostIndex({
     id: updatedPost.id,
     userId: updatedPost.userId,
-    content: updatedPost.content
+    content: updatedPost.content,
+    visibility: updatedPost.visibility
   });
 
   ctx.body = updatedPost;

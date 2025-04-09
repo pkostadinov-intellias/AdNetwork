@@ -9,7 +9,8 @@ const userFields: CollectionFieldSchema[] = [
 const postFields: CollectionFieldSchema[] = [
   { name: "id", type: "string" },
   { name: "userId", type: "string" },
-  { name: "content", type: "string" }
+  { name: "content", type: "string" },
+  { name: "visibility", type: "string" }
 ];
 
 export const usersCollection = {

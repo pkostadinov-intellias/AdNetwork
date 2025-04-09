@@ -4,13 +4,15 @@ export interface PostUpsertPayload {
   id: string;
   userId: string;
   content: string;
+  visibility: string;
 }
 
 export const handlePostUpsert = async (payload: PostUpsertPayload) => {
   const postDoc = {
     id: payload.id,
     userId: payload.userId,
-    content: payload.content
+    content: payload.content,
+    visibility: payload.visibility
   };
 
   await typesenseClient.collections("posts").documents().upsert(postDoc);

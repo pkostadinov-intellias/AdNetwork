@@ -1,10 +1,12 @@
 import { QUEUE_NAMES } from "../../utils/constant";
 import { channel } from "../config/rabbitmq";
+import { PostVisibility } from "../entities/Post";
 
 export interface IPublishPostIndex {
   id: string;
   userId: string;
   content: string;
+  visibility: PostVisibility;
 }
 
 export const publishPostIndex = async (post: IPublishPostIndex) => {

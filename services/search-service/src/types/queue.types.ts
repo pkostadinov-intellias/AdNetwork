@@ -8,5 +8,3 @@ export type QueuePayloadMap = {
   [QUEUE_NAMES.SEARCH_POST_INDEXED]: PostUpsertPayload;
   [QUEUE_NAMES.SEARCH_POST_DELETED]: { id: string };
 };
-
-export type QueueName = (typeof QUEUE_NAMES)[keyof typeof QUEUE_NAMES];
