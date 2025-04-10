@@ -1,14 +1,14 @@
-import createHttpError from "http-errors";
-import { Context } from "koa";
-import { searchAllService } from "./search.service";
+import createHttpError from 'http-errors'
+import { Context } from 'koa'
+import { searchAllService } from './search.service'
 
 export const searchAll = async (ctx: Context) => {
-  const query = ctx.query.q as string;
+  const query = ctx.query.q as string
 
   if (!query) {
-    throw createHttpError(400, "Missing search query");
+    throw createHttpError(400, 'Missing search query')
   }
 
-  const results = await searchAllService(query, ctx.state.user.id);
-  ctx.body = results;
-};
+  const results = await searchAllService(query, ctx.state.user.id)
+  ctx.body = results
+}
