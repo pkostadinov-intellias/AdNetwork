@@ -5,34 +5,34 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  JoinColumn
-} from "typeorm";
-import { Post } from "./Post";
+  JoinColumn,
+} from 'typeorm'
+import { Post } from './Post'
 
-@Entity("comments")
+@Entity('comments')
 export class Comment {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string
 
-  @Column("uuid")
-  postId: string;
+  @Column('uuid')
+  postId: string
 
-  @Column("uuid")
-  userId: string;
+  @Column('uuid')
+  userId: string
 
-  @Column({ type: "text" })
-  username: string;
+  @Column({ type: 'text' })
+  username: string
 
-  @Column({ type: "text" })
-  content: string;
+  @Column({ type: 'text' })
+  content: string
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt: Date
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt: Date
 
-  @ManyToOne(() => Post, (post) => post.comments, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "postId" })
-  post: Post;
+  @ManyToOne(() => Post, (post) => post.comments, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'postId' })
+  post: Post
 }

@@ -1,7 +1,7 @@
-const eslintPluginPrettier = require.resolve("eslint-plugin-prettier");
+const eslintPluginPrettier = require("eslint-plugin-prettier");
 const eslintConfigPrettier = require("eslint-config-prettier");
-const eslintPluginTypescript = require.resolve("@typescript-eslint/eslint-plugin");
-const eslintParserTypescript = require.resolve("@typescript-eslint/parser");
+const eslintPluginTypescript = require("@typescript-eslint/eslint-plugin");
+const eslintParserTypescript = require("@typescript-eslint/parser");
 
 module.exports = [
   {
