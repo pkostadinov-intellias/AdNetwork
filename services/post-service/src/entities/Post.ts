@@ -4,50 +4,50 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany
-} from "typeorm";
-import { Comment } from "./Comment";
-import { Like } from "./Like";
+  OneToMany,
+} from 'typeorm'
+import { Comment } from './Comment'
+import { Like } from './Like'
 
 export enum PostVisibility {
-  PUBLIC = "public",
-  CONNECTIONS = "connections",
-  PRIVATE = "private"
+  PUBLIC = 'public',
+  CONNECTIONS = 'connections',
+  PRIVATE = 'private',
 }
 
-@Entity("posts")
+@Entity('posts')
 export class Post {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string
 
-  @Column("uuid")
-  userId: string;
+  @Column('uuid')
+  userId: string
 
-  @Column({ type: "text", nullable: true })
-  content: string;
+  @Column({ type: 'text', nullable: true })
+  content: string
 
-  @Column({ type: "text", nullable: true })
-  mediaUrl: string;
+  @Column({ type: 'text', nullable: true })
+  mediaUrl: string
 
   @Column({
-    type: "enum",
+    type: 'enum',
     enum: PostVisibility,
-    default: PostVisibility.PUBLIC
+    default: PostVisibility.PUBLIC,
   })
-  visibility: PostVisibility;
+  visibility: PostVisibility
 
-  @Column({ type: "uuid", nullable: true })
-  originalPostId: string | null;
+  @Column({ type: 'uuid', nullable: true })
+  originalPostId: string | null
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt: Date
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt: Date
 
   @OneToMany(() => Comment, (comment) => comment.post)
-  comments: Comment[];
+  comments: Comment[]
 
   @OneToMany(() => Like, (like) => like.post)
-  likes: Like[];
+  likes: Like[]
 }

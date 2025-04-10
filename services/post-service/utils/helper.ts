@@ -1,39 +1,39 @@
-import axios from "axios";
-import createHttpError from "http-errors";
-import { Context } from "koa";
-import { config } from "../src/config/config";
+import axios from 'axios'
+import createHttpError from 'http-errors'
+import { Context } from 'koa'
+import { config } from '../src/config/config'
 
-export const getXUserHeader = (ctx: Context): Record<"x-user", string> => {
-  const xUserHeader = ctx.headers["x-user"];
+export const getXUserHeader = (ctx: Context): Record<'x-user', string> => {
+  const xUserHeader = ctx.headers['x-user']
 
-  if (typeof xUserHeader !== "string") {
-    throw new createHttpError.Unauthorized("Invalid or missing x-user header");
+  if (typeof xUserHeader !== 'string') {
+    throw new createHttpError.Unauthorized('Invalid or missing x-user header')
   }
 
-  return { "x-user": xUserHeader };
-};
+  return { 'x-user': xUserHeader }
+}
 
 export const validateUserExists = async (
   userId: string,
-  headers: Record<string, string>
+  headers: Record<string, string>,
 ) => {
   try {
     const res = await axios.get(`${config.USER_SERVICE_ENDPOINT}/${userId}`, {
-      headers
-    });
+      headers,
+    })
 
     if (!res.data) {
-      throw new createHttpError.NotFound(`User not found`);
+      throw new createHttpError.NotFound(`User not found`)
     }
 
-    return res.data;
+    return res.data
   } catch (error: any) {
     if (error.response?.status === 404) {
-      throw new createHttpError.NotFound(`User with ID ${userId} not found.`);
+      throw new createHttpError.NotFound(`User with ID ${userId} not found.`)
     }
 
     throw new createHttpError.InternalServerError(
-      `Failed to validate user existence.`
-    );
+      `Failed to validate user existence.`,
+    )
   }
-};
+}

@@ -1,220 +1,220 @@
-import createHttpError from "http-errors";
+import createHttpError from 'http-errors'
 import {
   commentRepository,
   likeRepository,
-  postRepository
-} from "../../config/database";
-import { Post, PostVisibility } from "../../entities/Post";
-import type { File as FormidableFile } from "formidable";
-import axios from "axios";
-import fs from "fs";
-import { config } from "../../config/config";
-import FormData from "form-data";
-import { validateUserExists } from "../../../utils/helper";
-import { Brackets } from "typeorm";
+  postRepository,
+} from '../../config/database'
+import { Post, PostVisibility } from '../../entities/Post'
+import type { File as FormidableFile } from 'formidable'
+import axios from 'axios'
+import fs from 'fs'
+import { config } from '../../config/config'
+import FormData from 'form-data'
+import { validateUserExists } from '../../../utils/helper'
+import { Brackets } from 'typeorm'
 
 export const getAllPostsService = async (currentUserId: string) => {
   const posts = postRepository
-    .createQueryBuilder("post")
-    .leftJoinAndSelect("post.likes", "like")
-    .leftJoinAndSelect("post.comments", "comment")
-    .where("post.visibility = :public", { public: PostVisibility.PUBLIC });
+    .createQueryBuilder('post')
+    .leftJoinAndSelect('post.likes', 'like')
+    .leftJoinAndSelect('post.comments', 'comment')
+    .where('post.visibility = :public', { public: PostVisibility.PUBLIC })
 
   if (currentUserId) {
-    posts.orWhere("post.visibility = :private AND post.userId = :userId", {
+    posts.orWhere('post.visibility = :private AND post.userId = :userId', {
       private: PostVisibility.PRIVATE,
-      userId: currentUserId
-    });
+      userId: currentUserId,
+    })
   }
 
-  return posts.orderBy("post.createdAt", "DESC").getMany();
-};
+  return posts.orderBy('post.createdAt', 'DESC').getMany()
+}
 
 export const getPostByIdService = async (id: string, currentUserId: string) => {
   const post = postRepository
-    .createQueryBuilder("post")
-    .leftJoinAndSelect("post.likes", "like")
-    .leftJoinAndSelect("post.comments", "comment")
-    .where("post.id = :id", { id })
+    .createQueryBuilder('post')
+    .leftJoinAndSelect('post.likes', 'like')
+    .leftJoinAndSelect('post.comments', 'comment')
+    .where('post.id = :id', { id })
     .andWhere(
       new Brackets((qb) =>
         qb
-          .where("post.visibility = :public", {
-            public: PostVisibility.PUBLIC
+          .where('post.visibility = :public', {
+            public: PostVisibility.PUBLIC,
           })
-          .orWhere("post.visibility = :private AND post.userId = :userId", {
+          .orWhere('post.visibility = :private AND post.userId = :userId', {
             private: PostVisibility.PRIVATE,
-            userId: currentUserId
-          })
-      )
+            userId: currentUserId,
+          }),
+      ),
     )
-    .getOne();
+    .getOne()
 
   if (!post) {
-    throw new createHttpError.NotFound("Post not found");
+    throw new createHttpError.NotFound('Post not found')
   }
 
-  return post;
-};
+  return post
+}
 
 export const getPostsByUserIdService = async (
   userId: string,
-  currentUserId: string
+  currentUserId: string,
 ) => {
-  const isOwner = userId === currentUserId;
+  const isOwner = userId === currentUserId
 
   const postQuery = postRepository
-    .createQueryBuilder("post")
-    .where("post.userId = :userId", { userId });
+    .createQueryBuilder('post')
+    .where('post.userId = :userId', { userId })
 
   if (isOwner) {
     postQuery.andWhere(
       new Brackets((qb) =>
         qb
-          .where("post.visibility = :public", {
-            public: PostVisibility.PUBLIC
+          .where('post.visibility = :public', {
+            public: PostVisibility.PUBLIC,
           })
-          .orWhere("post.visibility = :private", {
-            private: PostVisibility.PRIVATE
-          })
-      )
-    );
+          .orWhere('post.visibility = :private', {
+            private: PostVisibility.PRIVATE,
+          }),
+      ),
+    )
   } else {
-    postQuery.andWhere("post.visibility = :public", {
-      public: PostVisibility.PUBLIC
-    });
+    postQuery.andWhere('post.visibility = :public', {
+      public: PostVisibility.PUBLIC,
+    })
   }
 
-  return postQuery.orderBy("post.createdAt", "DESC").getMany();
-};
+  return postQuery.orderBy('post.createdAt', 'DESC').getMany()
+}
 
 export const createPostService = async (
   file: FormidableFile,
   data: Partial<Post>,
   headers: Record<string, string>,
-  userId: string
+  userId: string,
 ) => {
-  await validateUserExists(userId, headers);
+  await validateUserExists(userId, headers)
 
   const newPost = postRepository.create({
     ...data,
-    userId
-  });
+    userId,
+  })
 
-  const savedPost = await postRepository.save(newPost);
+  const savedPost = await postRepository.save(newPost)
 
-  const formData = new FormData();
-  formData.append("file", fs.createReadStream(file.filepath));
-  formData.append("fileName", file.originalFilename || "upload");
-  formData.append("fileType", file.mimetype || "application/octet-stream");
-  formData.append("ownerId", savedPost.id);
-  formData.append("ownerType", "post");
-  formData.append("assetType", "media");
+  const formData = new FormData()
+  formData.append('file', fs.createReadStream(file.filepath))
+  formData.append('fileName', file.originalFilename || 'upload')
+  formData.append('fileType', file.mimetype || 'application/octet-stream')
+  formData.append('ownerId', savedPost.id)
+  formData.append('ownerType', 'post')
+  formData.append('assetType', 'media')
 
   try {
     const assetRes = await axios.post(config.ASSET_SERVICE_ENDPOINT, formData, {
-      headers
-    });
+      headers,
+    })
 
-    const mediaUrl = assetRes.data.url;
-    savedPost.mediaUrl = mediaUrl;
-    return await postRepository.save(savedPost);
+    const mediaUrl = assetRes.data.url
+    savedPost.mediaUrl = mediaUrl
+    return await postRepository.save(savedPost)
   } catch (error) {
-    await postRepository.delete(savedPost.id);
-    console.error("Asset upload failed. Post rolled back.");
-    throw new createHttpError.BadRequest("Asset upload failed");
+    await postRepository.delete(savedPost.id)
+    console.error('Asset upload failed. Post rolled back.')
+    throw new createHttpError.BadRequest('Asset upload failed')
   }
-};
+}
 
 export const updatePostService = async (id: string, data: Partial<Post>) => {
-  const post = await postRepository.findOneBy({ id });
+  const post = await postRepository.findOneBy({ id })
 
   if (!post) {
-    throw new createHttpError.NotFound("Post not found");
+    throw new createHttpError.NotFound('Post not found')
   }
 
-  Object.assign(post, data);
-  return await postRepository.save(post);
-};
+  Object.assign(post, data)
+  return await postRepository.save(post)
+}
 
 export const deletePostService = async (
   postId: string,
-  headers: Record<string, string>
+  headers: Record<string, string>,
 ) => {
-  const post = await postRepository.findOneBy({ id: postId });
+  const post = await postRepository.findOneBy({ id: postId })
 
   if (!post) {
-    throw new createHttpError.NotFound("Post not found");
+    throw new createHttpError.NotFound('Post not found')
   }
 
   if (post.mediaUrl) {
     try {
       const assetRes = await axios.get(
         `${config.ASSET_SERVICE_ENDPOINT}/by-owner/${postId}`,
-        { headers }
-      );
+        { headers },
+      )
 
-      const asset = assetRes.data;
+      const asset = assetRes.data
 
       if (asset?.id) {
         await axios.delete(`${config.ASSET_SERVICE_ENDPOINT}/${asset.id}`, {
-          headers
-        });
+          headers,
+        })
       }
     } catch (error) {
-      console.error("Failed to delete asset related to post:", error);
+      console.error('Failed to delete asset related to post:', error)
       throw new createHttpError.InternalServerError(
-        "Failed to delete post media asset."
-      );
+        'Failed to delete post media asset.',
+      )
     }
   }
 
-  await postRepository.remove(post);
-};
+  await postRepository.remove(post)
+}
 
 export const createCommentService = async (
   postId: string,
   userId: string,
   username: string,
-  content: string
+  content: string,
 ) => {
-  const post = await postRepository.findOneBy({ id: postId });
-  if (!post) throw new createHttpError.NotFound("Post not found");
+  const post = await postRepository.findOneBy({ id: postId })
+  if (!post) throw new createHttpError.NotFound('Post not found')
 
   const newComment = commentRepository.create({
     userId,
     username,
     content,
-    post
-  });
-  return await commentRepository.save(newComment);
-};
+    post,
+  })
+  return await commentRepository.save(newComment)
+}
 
 export const deleteCommentService = async (commentId: string) => {
-  const comment = await commentRepository.findOneBy({ id: commentId });
+  const comment = await commentRepository.findOneBy({ id: commentId })
 
   if (!comment) {
-    throw new createHttpError.NotFound("Comment not found");
+    throw new createHttpError.NotFound('Comment not found')
   }
 
-  return await commentRepository.remove(comment);
-};
+  return await commentRepository.remove(comment)
+}
 
 export const toggleLikeService = async (postId: string, userId: string) => {
-  const post = await postRepository.findOneBy({ id: postId });
-  if (!post) throw new createHttpError.NotFound("Post not found");
+  const post = await postRepository.findOneBy({ id: postId })
+  if (!post) throw new createHttpError.NotFound('Post not found')
 
   const existingLike = await likeRepository.findOne({
     where: { userId, post: { id: postId } },
-    relations: ["post"]
-  });
+    relations: ['post'],
+  })
 
   if (existingLike) {
-    await likeRepository.delete(existingLike.id);
-    return false; // unliked
+    await likeRepository.delete(existingLike.id)
+    return false // unliked
   }
 
-  const newLike = likeRepository.create({ userId, post });
-  await likeRepository.save(newLike);
-  return true; // liked
-};
+  const newLike = likeRepository.create({ userId, post })
+  await likeRepository.save(newLike)
+  return true // liked
+}
