@@ -9,6 +9,9 @@ export const searchAll = async (ctx: Context) => {
     throw createHttpError(400, 'Missing search query')
   }
 
-  const results = await searchAllService(query, ctx.state.user.id)
+  const results = await searchAllService(query, {
+    id: ctx.state.user.id,
+    role: ctx.state.user.role,
+  })
   ctx.body = results
 }

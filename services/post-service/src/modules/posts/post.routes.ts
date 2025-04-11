@@ -39,7 +39,6 @@ postRouter.delete('/posts/:id', authorizeOwnerOrAdmin, deletePost)
 postRouter.post(
   '/posts/:id/comments',
   validatorMiddleware(createCommentSchema),
-  authorizeOwnerOrAdmin,
   createComment,
 )
 

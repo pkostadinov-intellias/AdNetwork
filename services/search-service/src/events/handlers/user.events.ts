@@ -4,6 +4,7 @@ export interface UserUpsertPayload {
   id: string
   username: string
   fullName: string
+  role: string
 }
 
 export const handleUserUpsert = async (payload: UserUpsertPayload) => {
@@ -11,6 +12,7 @@ export const handleUserUpsert = async (payload: UserUpsertPayload) => {
     id: payload.id,
     username: payload.username,
     fullName: payload.fullName,
+    role: payload.role,
   }
 
   await typesenseClient.collections('users').documents().upsert(userDoc)

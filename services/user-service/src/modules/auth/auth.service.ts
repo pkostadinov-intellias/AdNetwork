@@ -31,6 +31,7 @@ export const registerUser = async (
     id: newUser.id,
     username: newUser.username,
     fullName: newUser.fullName,
+    role: newUser.role,
   })
 
   return { user: omit(newUser, ['password']), token }

@@ -1,10 +1,12 @@
 import { channel } from '../config/rabbitmq'
+import { UserRole } from '../entities/User'
 import { QUEUE_NAMES } from '../utils/constant'
 
 interface IPublishUserIndex {
   id: string
   username: string
   fullName: string
+  role: UserRole
 }
 
 export const publishUserIndex = async (user: IPublishUserIndex) => {

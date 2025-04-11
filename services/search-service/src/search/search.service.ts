@@ -2,8 +2,14 @@ import { typesenseClient } from '../config/typesense/typesense'
 
 export const searchAllService = async (
   query: string,
-  currentUserId: string,
+  currentUser: { id: string; role: string },
 ) => {
+  const isAdmin = currentUser.role === 'admin'
+
+  const filterBy = isAdmin
+    ? undefined
+    : `visibility:=public || userId:=${currentUser.id}`
+
   const [userSearch, postSearch] = await Promise.all([
     typesenseClient.collections('users').documents().search({
       q: query,
@@ -15,7 +21,7 @@ export const searchAllService = async (
       .search({
         q: query,
         query_by: 'content',
-        filter_by: `visibility:=public || userId:=${currentUserId}`,
+        ...(filterBy && { filter_by: filterBy }),
       }),
   ])
 

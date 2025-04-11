@@ -45,6 +45,7 @@ export const updateUser = async (ctx: Context) => {
     id: updatedUser.id,
     username: updatedUser.username,
     fullName: updatedUser.fullName,
+    role: updatedUser.role,
   })
 
   ctx.body = updatedUser

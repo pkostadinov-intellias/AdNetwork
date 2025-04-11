@@ -13,42 +13,59 @@ import FormData from 'form-data'
 import { validateUserExists } from '../../../utils/helper'
 import { Brackets } from 'typeorm'
 
-export const getAllPostsService = async (currentUserId: string) => {
-  const posts = postRepository
+export const getAllPostsService = async (currentUser: {
+  id: string
+  role: string
+}) => {
+  const isAdmin = currentUser.role === 'admin'
+
+  const query = postRepository
     .createQueryBuilder('post')
     .leftJoinAndSelect('post.likes', 'like')
     .leftJoinAndSelect('post.comments', 'comment')
-    .where('post.visibility = :public', { public: PostVisibility.PUBLIC })
 
-  if (currentUserId) {
-    posts.orWhere('post.visibility = :private AND post.userId = :userId', {
-      private: PostVisibility.PRIVATE,
-      userId: currentUserId,
-    })
+  if (!isAdmin) {
+    query.where(
+      new Brackets((qb) => {
+        qb.where('post.visibility = :public', {
+          public: PostVisibility.PUBLIC,
+        }).orWhere('post.visibility = :private AND post.userId = :userId', {
+          private: PostVisibility.PRIVATE,
+          userId: currentUser.id,
+        })
+      }),
+    )
   }
 
-  return posts.orderBy('post.createdAt', 'DESC').getMany()
+  return query.orderBy('post.createdAt', 'DESC').getMany()
 }
 
-export const getPostByIdService = async (id: string, currentUserId: string) => {
-  const post = postRepository
+export const getPostByIdService = async (
+  id: string,
+  currentUser: { id: string; role: string },
+) => {
+  const isAdmin = currentUser.role === 'admin'
+
+  const query = postRepository
     .createQueryBuilder('post')
     .leftJoinAndSelect('post.likes', 'like')
     .leftJoinAndSelect('post.comments', 'comment')
     .where('post.id = :id', { id })
-    .andWhere(
-      new Brackets((qb) =>
-        qb
-          .where('post.visibility = :public', {
-            public: PostVisibility.PUBLIC,
-          })
-          .orWhere('post.visibility = :private AND post.userId = :userId', {
-            private: PostVisibility.PRIVATE,
-            userId: currentUserId,
-          }),
-      ),
+
+  if (!isAdmin) {
+    query.andWhere(
+      new Brackets((qb) => {
+        qb.where('post.visibility = :public', {
+          public: PostVisibility.PUBLIC,
+        }).orWhere('post.visibility = :private AND post.userId = :userId', {
+          private: PostVisibility.PRIVATE,
+          userId: currentUser.id,
+        })
+      }),
     )
-    .getOne()
+  }
+
+  const post = await query.getOne()
 
   if (!post) {
     throw new createHttpError.NotFound('Post not found')
@@ -59,33 +76,22 @@ export const getPostByIdService = async (id: string, currentUserId: string) => {
 
 export const getPostsByUserIdService = async (
   userId: string,
-  currentUserId: string,
+  currentUser: { id: string; role: string },
 ) => {
-  const isOwner = userId === currentUserId
+  const isAdmin = currentUser.role === 'admin'
+  const isOwner = currentUser.id === userId
 
-  const postQuery = postRepository
+  const query = postRepository
     .createQueryBuilder('post')
     .where('post.userId = :userId', { userId })
 
-  if (isOwner) {
-    postQuery.andWhere(
-      new Brackets((qb) =>
-        qb
-          .where('post.visibility = :public', {
-            public: PostVisibility.PUBLIC,
-          })
-          .orWhere('post.visibility = :private', {
-            private: PostVisibility.PRIVATE,
-          }),
-      ),
-    )
-  } else {
-    postQuery.andWhere('post.visibility = :public', {
+  if (!isAdmin && !isOwner) {
+    query.andWhere('post.visibility = :public', {
       public: PostVisibility.PUBLIC,
     })
   }
 
-  return postQuery.orderBy('post.createdAt', 'DESC').getMany()
+  return query.orderBy('post.createdAt', 'DESC').getMany()
 }
 
 export const createPostService = async (

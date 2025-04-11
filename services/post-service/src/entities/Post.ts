@@ -36,9 +36,6 @@ export class Post {
   })
   visibility: PostVisibility
 
-  @Column({ type: 'uuid', nullable: true })
-  originalPostId: string | null
-
   @CreateDateColumn()
   createdAt: Date
 

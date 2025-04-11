@@ -33,7 +33,7 @@ export const CommentItem: FC<CommentItemProps> = ({ comment, postId }) => {
           {comment.content}
         </p>
 
-        {isOwner && (
+        {(isOwner || authUser?.role === "admin") && (
           <Trash2
             size={18}
             onClick={handleDeleteComment}

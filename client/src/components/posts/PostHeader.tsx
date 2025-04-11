@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { PostDropdownMenu } from "./PostDropDownMenu";
 import { Post } from "@/types/post";
 import { useDialog } from "@/hooks/useDialog";
+import { useAppSelector } from "@/store/redux-hooks/useAppSelector";
 
 type PostHeaderProps = {
   username: string;
@@ -16,6 +17,9 @@ export const PostHeader: FC<PostHeaderProps> = ({
   post
 }) => {
   const { closeDialog } = useDialog();
+
+  const authUser = useAppSelector((state) => state.auth.user);
+  const isOwner = authUser ? post.userId === authUser.id : false;
 
   return (
     <div className="flex items-center justify-between p-4">
@@ -33,7 +37,9 @@ export const PostHeader: FC<PostHeaderProps> = ({
         </div>
       </Link>
 
-      <PostDropdownMenu post={post} />
+      {(isOwner || authUser?.role === "admin") && (
+        <PostDropdownMenu post={post} />
+      )}
     </div>
   );
 };

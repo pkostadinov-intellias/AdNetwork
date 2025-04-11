@@ -15,20 +15,26 @@ import createHttpError from 'http-errors'
 import { deletePostIndex, publishPostIndex } from '../../events/producer'
 
 export const getAllPosts = async (ctx: Context) => {
-  const posts = await getAllPostsService(ctx.state.user.id)
+  const posts = await getAllPostsService({
+    id: ctx.state.user.id,
+    role: ctx.state.user.role,
+  })
   ctx.body = posts
 }
 
 export const getPostById = async (ctx: Context) => {
-  const post = await getPostByIdService(ctx.params.id, ctx.state.user.id)
+  const post = await getPostByIdService(ctx.params.id, {
+    id: ctx.state.user.id,
+    role: ctx.state.user.role,
+  })
   ctx.body = post
 }
 
 export const getPostsByUserId = async (ctx: Context) => {
-  const posts = await getPostsByUserIdService(
-    ctx.params.userId,
-    ctx.state.user.id,
-  )
+  const posts = await getPostsByUserIdService(ctx.params.userId, {
+    id: ctx.state.user.id,
+    role: ctx.state.user.role,
+  })
   ctx.body = posts
 }
 

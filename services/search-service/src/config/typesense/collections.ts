@@ -4,6 +4,7 @@ const userFields: CollectionFieldSchema[] = [
   { name: 'id', type: 'string' },
   { name: 'username', type: 'string' },
   { name: 'fullName', type: 'string' },
+  { name: 'role', type: 'string' },
 ]
 
 const postFields: CollectionFieldSchema[] = [
