@@ -33,7 +33,8 @@ export const PostForm: FC<PostFormProps> = ({
     previewUrl,
     handleImageChange,
     handleSubmit,
-    isLoading
+    isLoading,
+    errors
   } = usePostForm({ type, initialData, onSuccess });
 
   const triggerFileInput = () => fileInputRef.current?.click();
@@ -117,12 +118,20 @@ export const PostForm: FC<PostFormProps> = ({
         </div>
       )}
 
+      {errors && (
+        <p className="text-sm text-red-500 font-medium">{errors.mediaFile}</p>
+      )}
+
       <Textarea
         placeholder="What's on your mind?"
         value={content}
         onChange={(e) => setContent(e.target.value)}
         className="resize-none"
       />
+
+      {errors && (
+        <p className="text-sm text-red-500 font-medium">{errors.content}</p>
+      )}
 
       <button
         onClick={handleSubmit}

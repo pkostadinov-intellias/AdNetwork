@@ -10,6 +10,7 @@ import { Post } from "@/types/post";
 import { useDeletePostMutation } from "@/services/postApi";
 import { useDialog } from "@/hooks/useDialog";
 import { DialogType } from "@/types/dialog";
+import { toast } from "sonner";
 
 export const PostDropdownMenu = ({ post }: { post: Post }) => {
   const authUser = useAppSelector((state) => state.auth.user);
@@ -18,7 +19,12 @@ export const PostDropdownMenu = ({ post }: { post: Post }) => {
   const { openDialog } = useDialog();
 
   const handleDelete = async () => {
-    await deletePost(post.id).unwrap();
+    try {
+      await deletePost(post.id).unwrap();
+      toast.success("Post has been deleted.");
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    }
   };
 
   return (

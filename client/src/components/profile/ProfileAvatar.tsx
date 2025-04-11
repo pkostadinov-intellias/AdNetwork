@@ -2,6 +2,7 @@ import { Camera } from "lucide-react";
 import { useAssets } from "@/hooks/useAssets";
 import { AssetType } from "@/types/assets";
 import ClipLoader from "react-spinners/ClipLoader";
+import { toast } from "sonner";
 
 interface ProfileAvatarProps {
   alt: string;
@@ -25,8 +26,10 @@ export const ProfileAvatar = ({
     try {
       const newAvatar = await uploadAsset(file, AssetType.AVATAR);
       onUploadSuccess?.(newAvatar.url);
+      toast.success("Avatar has been changed successfully.");
     } catch (error) {
       console.error("Avatar upload failed", error);
+      toast.error("Something went wrong. Please try again.");
     }
   };
 

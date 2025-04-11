@@ -3,6 +3,7 @@ import { store } from "./store/store";
 import { AppRoutes } from "./routes/AppRoutes";
 import { DialogProvider } from "./contexts/DialogContext";
 import { BrowserRouter } from "react-router-dom";
+import { Toaster } from "./components/ui/sonner";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <DialogProvider>
           <AppRoutes />
         </DialogProvider>
+        <Toaster position="top-right" />
       </BrowserRouter>
     </ReduxProvider>
   );

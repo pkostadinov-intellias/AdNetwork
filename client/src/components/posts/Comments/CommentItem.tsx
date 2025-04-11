@@ -3,6 +3,7 @@ import { Trash2 } from "lucide-react";
 import { useDeleteCommentMutation } from "@/services/postApi";
 import { Comment } from "@/types/post";
 import { useAppSelector } from "@/store/redux-hooks/useAppSelector";
+import { toast } from "sonner";
 
 type CommentItemProps = {
   comment: Comment;
@@ -15,6 +16,15 @@ export const CommentItem: FC<CommentItemProps> = ({ comment, postId }) => {
 
   const [deleteComment] = useDeleteCommentMutation();
 
+  const handleDeleteComment = async () => {
+    try {
+      await deleteComment({ postId, commentId: comment.id });
+      toast.success("Comment has been deleted.");
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    }
+  };
+
   return (
     <div className="flex flex-col space-y-1">
       <div className="flex items-start justify-between">
@@ -26,7 +36,7 @@ export const CommentItem: FC<CommentItemProps> = ({ comment, postId }) => {
         {isOwner && (
           <Trash2
             size={18}
-            onClick={() => deleteComment({ postId, commentId: comment.id })}
+            onClick={handleDeleteComment}
             className="text-red-400 cursor-pointer shrink-0 ml-2 mt-1"
           />
         )}

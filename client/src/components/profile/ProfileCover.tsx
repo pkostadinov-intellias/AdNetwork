@@ -2,6 +2,7 @@ import { useAssets } from "@/hooks/useAssets";
 import { AssetType } from "@/types/assets";
 import { Camera } from "lucide-react";
 import ClipLoader from "react-spinners/ClipLoader";
+import { toast } from "sonner";
 
 interface ProfileCoverProps {
   alt: string;
@@ -25,7 +26,9 @@ const ProfileCover = ({
     try {
       const newCover = await uploadAsset(file, AssetType.COVER);
       onUploadSuccess?.(newCover.url);
+      toast.success("Cover has been changed successfully.");
     } catch (error) {
+      toast.error("Something went wrong. Please try again.");
       console.error("Cover upload failed", error);
     }
   };

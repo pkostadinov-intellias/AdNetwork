@@ -6,6 +6,7 @@ import { profileApi, useUpdateUserMutation } from "@/services/profileApi";
 import { useAppDispatch } from "@/store/redux-hooks/useAppDispatch";
 import { useState } from "react";
 import { useDialog } from "@/hooks/useDialog";
+import { toast } from "sonner";
 
 interface EditProfileDialogProps {
   profileId: string;
@@ -38,16 +39,21 @@ const EditProfileDialog = ({
   const [avatarUrl, setAvatarUrl] = useState(initialAvatarUrl);
 
   const handleSubmit = async (editedUserData: ProfileFormData) => {
-    const updatedUser = await update({
-      id: profileId,
-      ...editedUserData
-    }).unwrap();
-    dispatch(
-      profileApi.util.invalidateTags([
-        { type: "User", id: updatedUser.username }
-      ])
-    );
-    closeDialog();
+    try {
+      const updatedUser = await update({
+        id: profileId,
+        ...editedUserData
+      }).unwrap();
+      toast.success("Profile has been edited successfully.");
+      dispatch(
+        profileApi.util.invalidateTags([
+          { type: "User", id: updatedUser.username }
+        ])
+      );
+      closeDialog();
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    }
   };
 
   return (
