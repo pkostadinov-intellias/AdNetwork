@@ -7,8 +7,8 @@ import {
   getUsersService,
   updateUserService,
 } from './users.service'
-import { User } from '../entities/User'
-import { deleteUserIndex, publishUserIndex } from '../events/producer'
+import { User } from '../../entities/User'
+import { deleteUserIndex, publishUserIndex } from '../../events/producer'
 
 export const getUsers = async (ctx: Context) => {
   ctx.body = await getUsersService()

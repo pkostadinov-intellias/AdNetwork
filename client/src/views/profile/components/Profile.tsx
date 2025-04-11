@@ -1,15 +1,16 @@
 import { useParams } from "react-router-dom";
-import ProfileCover from "./ProfileCover";
+import ProfileCover from "../../../components/profile/ProfileCover";
 import { useGetUserByUsernameQuery } from "@/services/profileApi";
 import { useAppSelector } from "@/store/redux-hooks/useAppSelector";
-import { ProfileAvatar } from "./ProfileAvatar";
-import { ProfileInfoSection } from "./ProfileInfoSection";
+import { ProfileAvatar } from "../../../components/profile/ProfileAvatar";
+import { ProfileInfoSection } from "../../../components/profile/ProfileInfoSection";
 import { useAppDispatch } from "@/store/redux-hooks/useAppDispatch";
 import { useLogoutMutation } from "@/services/authApi";
 import { logoutUser } from "@/store/slices/authSlice";
-import { ProfilePosts } from "./ProfilePosts";
+import { ProfilePosts } from "../../../components/profile/ProfilePosts";
 import { useDialog } from "@/hooks/useDialog";
 import { DialogType } from "@/types/dialog";
+import { postApi } from "@/services/postApi";
 
 export const Profile = () => {
   const { username } = useParams();
@@ -28,6 +29,7 @@ export const Profile = () => {
   const handleLogout = async () => {
     await logout();
     dispach(logoutUser());
+    dispach(postApi.util.invalidateTags([{ type: "Post" }]));
   };
 
   if (isLoading) {

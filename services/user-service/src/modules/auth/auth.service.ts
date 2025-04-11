@@ -1,14 +1,14 @@
 import bcrypt from 'bcryptjs'
 import createHttpError from 'http-errors'
-import { UserRole } from '../entities/User'
+import { UserRole } from '../../entities/User'
 import { omit } from 'lodash'
-import { userRepository } from '../config/database'
+import { userRepository } from '../../config/database'
 import {
   createUserService,
   getUserWithPasswordByUsername,
 } from '../users/users.service'
-import { createToken, invalidateToken } from '../utils/token'
-import { publishUserIndex } from '../events/producer'
+import { createToken, invalidateToken } from '../../utils/token'
+import { publishUserIndex } from '../../events/producer'
 
 export const registerUser = async (
   username: string,

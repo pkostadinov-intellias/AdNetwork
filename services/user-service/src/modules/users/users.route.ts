@@ -1,5 +1,5 @@
 import Router from 'koa-router'
-import { validatorMiddleware } from '../middlewares/validator.middleware'
+import { validatorMiddleware } from '../../middlewares/validator.middleware'
 import { createUserSchema, updateUserSchema } from './user-validation.schema'
 import {
   createUser,
@@ -9,7 +9,7 @@ import {
   getUsers,
   updateUser,
 } from './users.controller'
-import { authorizeUserOrAdmin } from '../middlewares/authorize-user-admin.middleware'
+import { authorizeUserOrAdmin } from '../../middlewares/authorize-user-admin.middleware'
 
 export const userRouter = new Router({ prefix: '/users' })
 

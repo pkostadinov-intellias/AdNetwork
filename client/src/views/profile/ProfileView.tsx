@@ -1,4 +1,4 @@
-import { Profile } from "@/components/profile/Profile";
+import { Profile } from "@/views/profile/components/Profile";
 import { SidebarLayout } from "@/layouts/SidebarLayout";
 
 const ProfileView = () => {

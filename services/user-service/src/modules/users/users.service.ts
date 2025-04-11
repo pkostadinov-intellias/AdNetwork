@@ -1,7 +1,7 @@
 import createHttpError from 'http-errors'
 import bcrypt from 'bcryptjs'
-import { User } from '../entities/User'
-import { userRepository } from '../config/database'
+import { User } from '../../entities/User'
+import { userRepository } from '../../config/database'
 
 export const getUsersService = async () => {
   return await userRepository.find()

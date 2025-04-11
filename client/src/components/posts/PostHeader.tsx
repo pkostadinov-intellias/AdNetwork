@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Link } from "react-router-dom";
 import { PostDropdownMenu } from "./PostDropDownMenu";
 import { Post } from "@/types/post";
+import { useDialog } from "@/hooks/useDialog";
 
 type PostHeaderProps = {
   username: string;
@@ -14,10 +15,12 @@ export const PostHeader: FC<PostHeaderProps> = ({
   avatarUrl,
   post
 }) => {
+  const { closeDialog } = useDialog();
+
   return (
     <div className="flex items-center justify-between p-4">
       <Link to={`/profile/${username}`}>
-        <div className="flex items-center p-4">
+        <div className="flex items-center p-4" onClick={closeDialog}>
           <img
             src={
               avatarUrl ||

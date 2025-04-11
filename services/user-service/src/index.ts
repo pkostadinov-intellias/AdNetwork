@@ -5,9 +5,9 @@ import { config } from './config/config'
 import { connectDatabase } from './config/database'
 import { connectRedis } from './config/redis'
 import { connectRabbitMQ } from './config/rabbitmq'
-import { authRouter } from './auth/auth.route'
+import { authRouter } from './modules/auth/auth.route'
 import { errorHandlerMiddleware } from './middlewares/error-handler.middleware'
-import { userRouter } from './users/users.route'
+import { userRouter } from './modules/users/users.route'
 import { extractUserMiddleware } from './middlewares/extract-user.middleware'
 
 const app = new Koa()
