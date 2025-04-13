@@ -1,0 +1,42 @@
+name: CI - Lint, Format, Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend-ci:
+    name: Lint and Test Backend Services
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        service: [post-service, user-service, asset-service, search-service]
+
+    defaults:
+      run:
+        working-directory: services/${{ matrix.service }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run Prettier
+        run: npm run format
+
+      - name: Run Unit Tests (if available)
+        if: matrix.service == 'post-service' || matrix.service == 'user-service'
+        run: npm run test
