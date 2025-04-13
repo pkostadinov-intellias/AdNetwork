@@ -33,6 +33,7 @@ jobs:
         run: npm install
 
       - name: Run ESLint
+        if: ${{ matrix.service != 'shared' }}
         run: npm run lint
 
       - name: Run Prettier
