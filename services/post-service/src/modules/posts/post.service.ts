@@ -10,7 +10,7 @@ import axios from 'axios'
 import fs from 'fs'
 import { config } from '../../config/config'
 import FormData from 'form-data'
-import { validateUserExists } from '../../../utils/helper'
+import { validateUserExists } from '../../utils/helper'
 import { Brackets } from 'typeorm'
 
 export const getAllPostsService = async (currentUser: {

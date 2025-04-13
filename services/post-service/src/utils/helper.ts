@@ -1,7 +1,7 @@
 import axios from 'axios'
 import createHttpError from 'http-errors'
 import { Context } from 'koa'
-import { config } from '../src/config/config'
+import { config } from '../config/config'
 
 export const getXUserHeader = (ctx: Context): Record<'x-user', string> => {
   const xUserHeader = ctx.headers['x-user']

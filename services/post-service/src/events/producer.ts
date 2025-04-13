@@ -1,4 +1,4 @@
-import { QUEUE_NAMES } from '../../utils/constant'
+import { QUEUE_NAMES } from '../utils/constant'
 import { channel } from '../config/rabbitmq'
 import { PostVisibility } from '../entities/Post'
 

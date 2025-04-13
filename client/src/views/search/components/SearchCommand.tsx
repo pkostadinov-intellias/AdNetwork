@@ -57,7 +57,7 @@ export const SearchCommand: FC = () => {
         {users.length > 0 && (
           <CommandGroup heading="Users">
             {users.map((user) => (
-              <Link to={`/profile/${user?.username}`}>
+              <Link key={user.id} to={`/profile/${user?.username}`}>
                 <CommandItem
                   key={user.id}
                   value={`${user.fullName} ${user.username}`}

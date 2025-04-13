@@ -10,7 +10,7 @@ import {
   createCommentService,
   deleteCommentService,
 } from './post.service'
-import { getXUserHeader } from '../../../utils/helper'
+import { getXUserHeader } from '../../utils/helper'
 import createHttpError from 'http-errors'
 import { deletePostIndex, publishPostIndex } from '../../events/producer'
 
