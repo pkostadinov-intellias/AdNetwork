@@ -2,18 +2,16 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-COPY ../../package*.json ./
+COPY package*.json ./
 
-COPY ../../services/shared ./services/shared
+COPY services/shared ./services/shared
 
-COPY . ./services/user-service
+COPY services/user-service ./services/user-service
 
 RUN npm install --workspaces
 
 WORKDIR /app/services/user-service
 
 EXPOSE 4000
-
-USER node
 
 CMD ["npm", "run", "dev"]
