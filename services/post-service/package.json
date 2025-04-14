@@ -32,7 +32,7 @@
     "typeorm": "^0.3.21"
   },
   "devDependencies": {
-    "@myorg/shared": "file:../shared",
+    "@myorg/shared": "1.0.0",
     "@types/amqplib": "^0.10.7",
     "@types/jest": "^29.5.14",
     "@types/koa": "^2.15.0",

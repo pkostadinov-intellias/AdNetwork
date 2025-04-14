@@ -18,7 +18,7 @@
   "type": "commonjs",
   "dependencies": {
     "@koa/cors": "^5.0.0",
-    "@myorg/shared": "file:../shared",
+    "@myorg/shared": "1.0.0",
     "axios": "^1.8.3",
     "dotenv": "^16.4.7",
     "http-proxy-middleware": "^3.0.3",

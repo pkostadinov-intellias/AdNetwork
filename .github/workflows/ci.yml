@@ -13,12 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        service:
-          [post-service, user-service, asset-service, search-service, shared]
-
-    defaults:
-      run:
-        working-directory: services/${{ matrix.service }}
+        service: [post-service, user-service, asset-service, search-service]
 
     steps:
       - name: Checkout code
@@ -29,17 +24,19 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install all dependencies from root
+        run: |
+          npm install --workspaces
 
-      - name: Run ESLint
-        if: ${{ matrix.service != 'shared' }}
+      - name: Lint
         run: npm run lint
+        working-directory: ./services/${{ matrix.service }}
 
-      - name: Run Prettier
-        if: ${{ matrix.service != 'shared' }}
+      - name: Format
         run: npm run format
+        working-directory: ./services/${{ matrix.service }}
 
-      - name: Run Unit Tests (if available)
+      - name: Run Unit Tests
         if: matrix.service == 'post-service' || matrix.service == 'user-service'
         run: npm run test
+        working-directory: ./services/${{ matrix.service }}
