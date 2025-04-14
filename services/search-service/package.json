@@ -17,7 +17,7 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@myorg/shared": "file:../shared",
+    "@myorg/shared": "1.0.0",
     "@types/amqplib": "^0.10.7",
     "@types/dotenv": "^6.1.1",
     "@types/koa": "^2.15.0",

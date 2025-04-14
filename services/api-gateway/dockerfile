@@ -4,12 +4,14 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+COPY services/shared ./services/shared
 
-COPY . .
+COPY services/api-gateway ./services/api-gateway
+
+RUN npm install --workspaces
+
+WORKDIR /app/services/api-gateway
 
 EXPOSE 3001
-
-USER node
 
 CMD ["npm", "run", "dev"]

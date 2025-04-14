@@ -91,7 +91,9 @@ services:
       - backend
 
   user-service:
-    build: ./services/user-service
+    build:
+      context: .
+      dockerfile: ./services/user-service/dockerfile
     container_name: user-service
     restart: always
     depends_on:
@@ -120,7 +122,9 @@ services:
       - backend
 
   post-service:
-    build: ./services/post-service
+    build:
+      context: .
+      dockerfile: ./services/post-service/dockerfile
     container_name: post-service
     restart: always
     depends_on:
@@ -146,7 +150,9 @@ services:
       - backend
 
   asset-service:
-    build: ./services/asset-service
+    build:
+      context: .
+      dockerfile: ./services/asset-service/dockerfile
     container_name: asset-service
     restart: always
     depends_on:
@@ -171,7 +177,9 @@ services:
       - backend
 
   api-gateway:
-    build: ./services/api-gateway
+    build:
+      context: .
+      dockerfile: ./services/api-gateway/dockerfile
     container_name: api-gateway
     restart: always
     depends_on:
@@ -193,7 +201,9 @@ services:
       - backend
 
   search-service:
-    build: ./services/search-service
+    build:
+      context: .
+      dockerfile: ./services/search-service/dockerfile
     container_name: search-service
     restart: always
     depends_on:
@@ -219,6 +229,7 @@ volumes:
   postgres-user-data:
   postgres-post-data:
   postgres-asset-data:
+  typesense-data:
 
 networks:
   backend:

@@ -4,12 +4,14 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+COPY services/shared ./services/shared
 
-COPY . .
+COPY services/post-service ./services/post-service
+
+RUN npm install --workspaces
+
+WORKDIR /app/services/post-service
 
 EXPOSE 4001
-
-USER node
 
 CMD ["npm", "run", "dev"]
