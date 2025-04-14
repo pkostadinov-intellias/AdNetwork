@@ -25,8 +25,7 @@ jobs:
           node-version: 22
 
       - name: Install all dependencies from root
-        run: |
-          npm install --workspaces
+        run: npm install --workspaces
 
       - name: Lint
         run: npm run lint
