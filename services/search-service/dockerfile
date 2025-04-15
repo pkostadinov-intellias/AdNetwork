@@ -2,13 +2,9 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY . .
 
-COPY services/shared ./services/shared
-
-COPY services/search-service ./services/search-service
-
-RUN npm install --workspaces
+RUN npm install --workspace services/search-service
 
 WORKDIR /app/services/search-service
 
