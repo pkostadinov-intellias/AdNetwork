@@ -41,7 +41,6 @@ describe('User Service', () => {
     fullName: '',
     profession: '',
     biography: '',
-    connections: 0,
     createdAt: new Date(),
     updatedAt: new Date(),
   }

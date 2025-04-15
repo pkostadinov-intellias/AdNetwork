@@ -11,8 +11,6 @@ export const getVisibilityLabel = (v: PostVisibility) => {
   switch (v) {
     case PostVisibility.PUBLIC:
       return "Public";
-    case PostVisibility.CONNECTIONS:
-      return "Connections";
     case PostVisibility.PRIVATE:
       return "Private";
     default:

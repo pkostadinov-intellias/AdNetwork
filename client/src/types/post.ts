@@ -16,7 +16,6 @@ export interface Comment {
 
 export enum PostVisibility {
   PUBLIC = "public",
-  CONNECTIONS = "connections",
   PRIVATE = "private"
 }
 

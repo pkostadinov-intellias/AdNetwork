@@ -11,7 +11,6 @@ import { Like } from './Like'
 
 export enum PostVisibility {
   PUBLIC = 'public',
-  CONNECTIONS = 'connections',
   PRIVATE = 'private',
 }
 

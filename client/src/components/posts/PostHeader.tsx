@@ -4,6 +4,7 @@ import { PostDropdownMenu } from "./PostDropDownMenu";
 import { Post } from "@/types/post";
 import { useDialog } from "@/hooks/useDialog";
 import { useAppSelector } from "@/store/redux-hooks/useAppSelector";
+import { Badge } from "../ui/badge";
 
 type PostHeaderProps = {
   username: string;
@@ -34,6 +35,9 @@ export const PostHeader: FC<PostHeaderProps> = ({
             className="w-8 h-8 rounded-full object-cover"
           />
           <span className="ml-3 font-medium">{username}</span>
+          <Badge className="ml-3" variant="outline">
+            {post?.visibility}
+          </Badge>
         </div>
       </Link>
 

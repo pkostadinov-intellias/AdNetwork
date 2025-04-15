@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { Heart, Send } from "lucide-react";
 import { useAppSelector } from "@/store/redux-hooks/useAppSelector";
 import {
+  postApi,
   useCreateCommentMutation,
   useGetPostByIdQuery,
   useToggleLikeMutation
@@ -10,6 +11,8 @@ import { DialogLayout } from "@/layouts/DialogLayout";
 import { useGetUserByIdQuery } from "@/services/profileApi";
 import { PostHeader } from "./PostHeader";
 import { CommentItem } from "./Comments/CommentItem";
+import { ScrollArea } from "../ui/scroll-area";
+import { useAppDispatch } from "@/store/redux-hooks/useAppDispatch";
 
 interface PostWithCommentsProps {
   postId: string;
@@ -22,6 +25,7 @@ export const PostWithCommentsDialog: FC<PostWithCommentsProps> = ({
 }) => {
   const [newComment, setNewComment] = useState("");
   const authUser = useAppSelector((state) => state.auth.user);
+  const dispatch = useAppDispatch();
 
   const { data: user, isLoading: userLoading } = useGetUserByIdQuery(userId);
   const { data: post, isLoading: postLoading } = useGetPostByIdQuery(postId);
@@ -43,6 +47,8 @@ export const PostWithCommentsDialog: FC<PostWithCommentsProps> = ({
         postId: post.id,
         data: { content: newComment, username: user.username }
       }).unwrap();
+
+      dispatch(postApi.util.invalidateTags([{ type: "Post", id: post.id }]));
 
       setNewComment("");
     } catch (error) {
@@ -115,11 +121,13 @@ export const PostWithCommentsDialog: FC<PostWithCommentsProps> = ({
             </form>
 
             {post.comments.map((comment) => (
-              <CommentItem
-                key={comment.id}
-                comment={comment}
-                postId={post.id}
-              />
+              <ScrollArea>
+                <CommentItem
+                  key={comment.id}
+                  comment={comment}
+                  postId={post.id}
+                />
+              </ScrollArea>
             ))}
           </div>
         </div>

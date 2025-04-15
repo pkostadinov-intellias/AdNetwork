@@ -7,7 +7,6 @@ interface ProfileInfoSectionProps {
   profession: string;
   bio: string;
   postsCount: number;
-  connectionsCount: number;
   canEdit?: boolean;
   onEditProfile: () => void;
   onLogout?: () => void;
@@ -19,7 +18,6 @@ export const ProfileInfoSection = ({
   role,
   profession,
   bio,
-  connectionsCount,
   canEdit = false,
   onEditProfile,
   onLogout
@@ -42,12 +40,6 @@ export const ProfileInfoSection = ({
             </button>
           </>
         )}
-      </div>
-
-      <div className="flex gap-8 mb-4">
-        <span>
-          <strong>{connectionsCount}</strong> connections
-        </span>
       </div>
 
       <div>

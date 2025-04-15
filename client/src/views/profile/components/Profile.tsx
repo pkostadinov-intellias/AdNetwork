@@ -51,8 +51,7 @@ export const Profile = () => {
     avatarUrl,
     coverImageUrl: coverUrl,
     role,
-    posts,
-    connections
+    posts
   } = profile;
 
   const handleEditProfile = () => {
@@ -87,7 +86,6 @@ export const Profile = () => {
           profession={profession}
           bio={bio}
           postsCount={posts}
-          connectionsCount={connections}
           canEdit={isOwner}
           onEditProfile={handleEditProfile}
           onLogout={handleLogout}
