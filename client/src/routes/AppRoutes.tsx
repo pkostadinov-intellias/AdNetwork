@@ -1,6 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import ProtectedRoute from "@/routes/ProtectedRoute";
+import MessengerView from "@/views/messenger/MessengerView";
+import { useSocket } from "@/hooks/useSocket";
 
 const LoginView = lazy(() => import("@/views/auth/LoginView"));
 const RegisterView = lazy(() => import("@/views/auth/RegisterView"));
@@ -11,6 +13,8 @@ const CreatePostView = lazy(() => import("@/views/posts/CreatePostView"));
 const SearchView = lazy(() => import("@/views/search/SearchView"));
 
 export const AppRoutes = () => {
+  useSocket();
+
   return (
     <Suspense fallback={<div className="text-center mt-10">Loading...</div>}>
       <Routes>
@@ -22,6 +26,7 @@ export const AppRoutes = () => {
           <Route path="/profile/:username" element={<ProfileView />} />
           <Route path="/search" element={<SearchView />} />
           <Route path="/posts/create" element={<CreatePostView />} />
+          <Route path="/messenger" element={<MessengerView />} />
         </Route>
 
         <Route path="*" element={<NotFoundView />} />

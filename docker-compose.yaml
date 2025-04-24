@@ -200,6 +200,21 @@ services:
     networks:
       - backend
 
+  messenger-mongodb:
+    image: mongo
+    container_name: messenger-mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGODB_NAME}
+    env_file:
+      - .env
+    volumes:
+      - messenger-mongodb-data:/data/db
+    networks:
+      - backend
+
   search-service:
     build:
       context: .
@@ -225,11 +240,34 @@ services:
     networks:
       - backend
 
+  messenger-service:
+    build:
+      context: .
+      dockerfile: ./services/messenger-service/dockerfile
+    container_name: messenger-service
+    ports:
+      - "4004:4004"
+    restart: always
+    environment:
+      NODE_ENV: development
+      PORT: ${MESSENGER_SERVICE_PORT}
+      JWT_SECRET: ${JWT_SECRET}
+    env_file:
+      - .env
+    volumes:
+      - ./services/messenger-service:/app
+      - /app/node_modules
+    working_dir: /app
+    command: npm run dev
+    networks:
+      - backend
+
 volumes:
   postgres-user-data:
   postgres-post-data:
   postgres-asset-data:
   typesense-data:
+  messenger-mongodb-data:
 
 networks:
   backend:

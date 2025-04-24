@@ -5,6 +5,7 @@ import { profileApi } from "@/services/profileApi";
 import { assetApi } from "@/services/assetApi";
 import { postApi } from "@/services/postApi";
 import { searchApi } from "@/services/searchApi";
+import { messengerApi } from "@/services/messengerApi";
 
 export const store = configureStore({
   reducer: {
@@ -13,7 +14,8 @@ export const store = configureStore({
     [profileApi.reducerPath]: profileApi.reducer,
     [assetApi.reducerPath]: assetApi.reducer,
     [postApi.reducerPath]: postApi.reducer,
-    [searchApi.reducerPath]: searchApi.reducer
+    [searchApi.reducerPath]: searchApi.reducer,
+    [messengerApi.reducerPath]: messengerApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -21,7 +23,8 @@ export const store = configureStore({
       profileApi.middleware,
       assetApi.middleware,
       postApi.middleware,
-      searchApi.middleware
+      searchApi.middleware,
+      messengerApi.middleware
     )
 });
 

@@ -22,7 +22,6 @@ export const uploadAssetService = async (
     await validateUserExists(ownerId)
   }
 
-  //TODO INVESTIGATE
   const file = fs.readFileSync(uploadedFile.filepath)
 
   const imageKitFile = await imageKit.upload({ file, fileName })
